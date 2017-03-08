@@ -86,8 +86,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    string                      $compressionType        The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
      * @var    array                       $compressionFileType    The default file compression types with their associated filename extensions
      * @var    array                       $repositoryArchiveNames The names of the archived directories located in main repository
-
-     * @static MerlinBackupInterface            $instance               The static instance MerlinBackupInterface
+     * @static MerlinBackupInterface       $instance               The static instance MerlinBackupInterface
      * @static int                         $objectCount            The static count of MerlinBackupInterface
      * @var    array                       $storageRegister        The stored set of data structures used by this class
      * @var    array                       $mysqlDumpOptions       The options to use within the mysqldump statement
