@@ -90,7 +90,6 @@ $ composer require ucsdmath/merlin-backup
 ## Usage
 
 ``` php
-
 require ('vendor/autoload.php');
 
 use Symfony\Component\Yaml\Dumper;
@@ -111,13 +110,13 @@ $backup = new MerlinBackup(
     )
 );
 
-var_dump(
-    $backup
-        ->renderDailyMysqlDump('Maverick')
-            ->renderDailyMysqlDump('Goose')
-                ->renderDailyMysqlDump('Hollywood')
-);
-
+/*    Goose: "No. No, Mav, this is not a good idea."
+ * Maverick: "Sorry, Goose, but it's time to buzz the tower."
+ */
+$backup
+    ->renderDailyMysqlDump('Maverick')
+        ->renderDailyMysqlDump('Goose')
+            ->renderDailyMysqlDump('Hollywood');
 ```
 
 ## Documentation
