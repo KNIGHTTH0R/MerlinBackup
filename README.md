@@ -90,8 +90,34 @@ $ composer require ucsdmath/merlin-backup
 ## Usage
 
 ``` php
-$perform = new \UCSDMath\MerlinBackup\MerlinBackup();
-$perform->dailyDump();
+
+require ('vendor/autoload.php');
+
+use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
+use UCSDMath\Filesystem\Filesystem;
+use UCSDMath\Serialization\Yaml\Yaml;
+use UCSDMath\Configuration\ConfigurationVault\ConfigurationVault;
+use UCSDMath\MerlinBackup\MerlinBackup;
+
+$backup = new MerlinBackup(
+    new Filesystem(),
+    new ConfigurationVault(
+        new Filesystem(),
+        new Yaml(
+            new Parser(),
+            new Dumper()
+        )
+    )
+);
+
+var_dump(
+    $backup
+        ->renderDailyMysqlDump('Maverick')
+            ->renderDailyMysqlDump('Goose')
+                ->renderDailyMysqlDump('Hollywood')
+);
+
 ```
 
 ## Documentation

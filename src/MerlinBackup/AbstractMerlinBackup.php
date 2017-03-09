@@ -72,81 +72,90 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     /**
      * Properties.
      *
-     * @var    FilesystemInterface         $filesystem             The Filesystem Interface
-     * @var    ConfigurationVaultInterface $configVault            The ConfigurationVault Interface
-     * @var    mysqli_stmt                 $stmt                   The mysqli_stmt statement {object} returns a statement handle for further operations on the statement
-     * @var    mysqli                      $mysqli                 The mysqli Interface
-     * @var    string                      $sql                    The SQL prepared statement
-     * @var    string                      $repository             The place or directory where database tables are held
-     * @var    string                      $backupDirectory        The place or directory where daily backups are stored
-     * @var    string                      $todaysDate             The current date for today (e.g., yyyy-mm-dd)
-     * @var    string                      $todaysTimestamp        The default timestamp for today (e.g., yyyy-mm-dd 060000)
-     * @var    string                      $mysqldump              The location on the system for the mysqldump utility
-     * @var    bool                        $isMysqldumpEnabled     The option to enable file dumps of MySQL tables and databases
-     * @var    string                      $compressionType        The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
-     * @var    array                       $compressionFileType    The default file compression types with their associated filename extensions
-     * @var    array                       $repositoryArchiveNames The names of the archived directories located in main repository
-     * @static MerlinBackupInterface       $instance               The static instance MerlinBackupInterface
-     * @static int                         $objectCount            The static count of MerlinBackupInterface
-     * @var    array                       $storageRegister        The stored set of data structures used by this class
-     * @var    array                       $mysqlDumpOptions       The options to use within the mysqldump statement
+     * @var    FilesystemInterface         $filesystem                   The Filesystem Interface
+     * @var    ConfigurationVaultInterface $configVault                  The ConfigurationVault Interface
+     * @var    mysqli_stmt                 $stmt                         The mysqli_stmt statement {object} returns a statement handle for further operations on the statement
+     * @var    mysqli                      $mysqli                       The mysqli Interface
+     * @var    string                      $sql                          The SQL prepared statement
+     * @var    string                      $repository                   The place or directory where database tables are held
+     * @var    string                      $backupDirectory              The place or directory where daily backups are stored
+     * @var    string                      $backupDirectory              The directory repository location (for storage of daily backups)
+     * @var    string                      $backupDirectoryGroup         The directory group settings for the repository (storage of all daily backups)
+     * @var    int                         $backupDirectoryPermissions   The directory permission settings for the repository (e.g., 0775 - storage of all daily backups)
+     * @var    string                      $backupDailyBackupGroup       The directory group settings for the daily backups
+     * @var    int                         $backupDailyBackupPermissions The directory permission settings for the daily backups (e.g., 0660)
+     * @var    string                      $todaysDate                   The current date for today (e.g., yyyy-mm-dd)
+     * @var    string                      $todaysTimestamp              The default timestamp for today (e.g., yyyy-mm-dd 060000)
+     * @var    string                      $mysqldump                    The location on the system for the mysqldump utility
+     * @var    bool                        $isMysqldumpEnabled           The option to enable file dumps of MySQL tables and databases
+     * @var    string                      $compressionType              The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
+     * @var    array                       $compressionFileType          The default file compression types with their associated filename extensions
+     * @var    array                       $repositoryArchiveNames       The names of the archived directories located in main repository
+     * @static MerlinBackupInterface       $instance                     The static instance MerlinBackupInterface
+     * @static int                         $objectCount                  The static count of MerlinBackupInterface
+     * @var    array                       $storageRegister              The stored set of data structures used by this class
+     * @var    array                       $mysqlDumpOptions             The options to use within the mysqldump statement
      */
-    protected $filesystem             = null;
-    protected $configVault            = null;
-    protected $stmt                   = null;
-    protected $mysqli                 = null;
-    protected $sql                    = null;
-    protected $repository             = null;
-    protected $backupDirectory        = null;
-    protected $todaysDate             = null;
-    protected $todaysTimestamp        = null;
-    protected $mysqldump              = null;
-    protected $isMysqldumpEnabled     = null;
-    protected $compressionType        = null;
-    protected $repositoryArchiveNames = null;
-    protected $compressionFileType    = ['None' => null, 'GZIP' => '.gz', 'BZIP2' => '.bz2', 'COMPRESS' => '.Z', 'LZMA' => '.lzma'];
-    protected static $instance        = null;
-    protected static $objectCount     = 0;
-    protected $storageRegister        = [];
-    protected $mysqlDumpOptions       = [
-        '--add-drop-database'         => false,  // Add DROP DATABASE statement before each CREATE DATABASE statement
-        '--add-drop-table'            => false,  // Add DROP TABLE statement before each CREATE TABLE statement
-        '--add-drop-trigger'          => false,  // Add DROP TRIGGER statement before each CREATE TRIGGER statement
-        '--add-locks'                 => false,  // Surround each table dump with LOCK TABLES and UNLOCK TABLES statements
-        '--comments'                  => true,   // Add comments to dump file
-        '--compact'                   => true,   // Produce more compact output
-        '--create-options'            => false,  // Include all MySQL-specific table options in CREATE TABLE statements
-        '--debug'                     => false,  // Write debugging log
-        '--default-character-set'     => false,  // Specify default character set
-        '--disable-keys'              => false,  // For each table, surround INSERT statements with statements to disable and enable keys
-        '--extended-insert'           => false,  // Use multiple-row INSERT syntax
-        '--flush-logs'                => false,  // Flush MySQL server log files before starting dump
-        '--flush-privileges'          => false,  // Emit a FLUSH PRIVILEGES statement after dumping mysql database
-        '--lock-all-tables'           => false,  // Lock all tables across all databases
-        '--lock-tables'               => false,  // Lock all tables before dumping them
-        '--no-data'                   => false,  // Do not dump table contents
-        '--opt'                       => true,   // Shorthand for --add-drop-table --add-locks --create-options --disable-keys --extended-insert --lock-tables --quick --set-charset.
-        '--quick'                     => false,  // Retrieve rows for a table from the server a row at a time
-        '--replace'                   => false,  // Write REPLACE statements rather than INSERT statements
-        '--set-charset'               => false,  // Add SET NAMES default_character_set to output
-        '--skip-add-drop-table'       => false,  // Do not add a DROP TABLE statement before each CREATE TABLE statement
-        '--skip-add-locks'            => false,  // Do not add locks
-        '--skip-comments'             => false,  // Do not add comments to dump file
-        '--skip-compact'              => false,  // Do not produce more compact output
-        '--skip-disable-keys'         => false,  // Do not disable keys
-        '--skip-extended-insert'      => false,  // Turn off extended-insert
-        '--skip-opt'                  => false,  // Turn off options set by --opt
-        '--skip-quick'                => false,  // Do not retrieve rows for a table from the server a row at a time
-        '--skip-quote-names'          => false,  // Do not quote identifiers
-        '--skip-set-charset'          => false,  // Do not write SET NAMES statement
-        '--skip-triggers'             => false,  // Do not dump triggers
-        '--skip-tz-utc'               => false,  // Turn off tz-utc
-        '--host'                      => true,   // Host to connect to (IP address or hostname)
-        '--port'                      => true,   // TCP/IP port number to use for connection (e.g., 3306)
-        '--user'                      => true,   // MySQL user name to use when connecting to server
-        '--password'                  => true,   // Password to use when connecting to server
-        '--protocol'                  => true,   // Connection protocol to use ('TCP','SOCKET','PIPE','MEMORY')
-        '--socket'                    => false,  // For connections to localhost, the Unix socket file to use
+    protected $filesystem                   = null;
+    protected $configVault                  = null;
+    protected $stmt                         = null;
+    protected $mysqli                       = null;
+    protected $sql                          = null;
+    protected $repository                   = null;
+    protected $backupDirectory              = null;
+    protected $backupDailyBackupGroup       = null;
+    protected $backupDailyBackupPermissions = null;
+    protected $backupDirectoryGroup         = null;
+    protected $backupDirectoryPermissions   = null;
+    protected $todaysDate                   = null;
+    protected $todaysTimestamp              = null;
+    protected $mysqldump                    = null;
+    protected $isMysqldumpEnabled           = null;
+    protected $compressionType              = null;
+    protected $repositoryArchiveNames       = null;
+    protected $compressionFileType          = ['None' => null, 'GZIP' => '.gz', 'BZIP2' => '.bz2', 'COMPRESS' => '.Z', 'LZMA' => '.lzma'];
+    protected static $instance              = null;
+    protected static $objectCount           = 0;
+    protected $storageRegister              = [];
+    protected $mysqlDumpOptions             = [
+        '--add-drop-database'               => false,  // Add DROP DATABASE statement before each CREATE DATABASE statement
+        '--add-drop-table'                  => false,  // Add DROP TABLE statement before each CREATE TABLE statement
+        '--add-drop-trigger'                => false,  // Add DROP TRIGGER statement before each CREATE TRIGGER statement
+        '--add-locks'                       => false,  // Surround each table dump with LOCK TABLES and UNLOCK TABLES statements
+        '--comments'                        => true,   // Add comments to dump file
+        '--compact'                         => true,   // Produce more compact output
+        '--create-options'                  => false,  // Include all MySQL-specific table options in CREATE TABLE statements
+        '--debug'                           => false,  // Write debugging log
+        '--default-character-set'           => false,  // Specify default character set
+        '--disable-keys'                    => false,  // For each table, surround INSERT statements with statements to disable and enable keys
+        '--extended-insert'                 => false,  // Use multiple-row INSERT syntax
+        '--flush-logs'                      => false,  // Flush MySQL server log files before starting dump
+        '--flush-privileges'                => false,  // Emit a FLUSH PRIVILEGES statement after dumping mysql database
+        '--lock-all-tables'                 => false,  // Lock all tables across all databases
+        '--lock-tables'                     => false,  // Lock all tables before dumping them
+        '--no-data'                         => false,  // Do not dump table contents
+        '--opt'                             => true,   // Shorthand for --add-drop-table --add-locks --create-options --disable-keys --extended-insert --lock-tables --quick --set-charset.
+        '--quick'                           => false,  // Retrieve rows for a table from the server a row at a time
+        '--replace'                         => false,  // Write REPLACE statements rather than INSERT statements
+        '--set-charset'                     => false,  // Add SET NAMES default_character_set to output
+        '--skip-add-drop-table'             => false,  // Do not add a DROP TABLE statement before each CREATE TABLE statement
+        '--skip-add-locks'                  => false,  // Do not add locks
+        '--skip-comments'                   => false,  // Do not add comments to dump file
+        '--skip-compact'                    => false,  // Do not produce more compact output
+        '--skip-disable-keys'               => false,  // Do not disable keys
+        '--skip-extended-insert'            => false,  // Turn off extended-insert
+        '--skip-opt'                        => false,  // Turn off options set by --opt
+        '--skip-quick'                      => false,  // Do not retrieve rows for a table from the server a row at a time
+        '--skip-quote-names'                => false,  // Do not quote identifiers
+        '--skip-set-charset'                => false,  // Do not write SET NAMES statement
+        '--skip-triggers'                   => false,  // Do not dump triggers
+        '--skip-tz-utc'                     => false,  // Turn off tz-utc
+        '--host'                            => true,   // Host to connect to (IP address or hostname)
+        '--port'                            => true,   // TCP/IP port number to use for connection (e.g., 3306)
+        '--user'                            => true,   // MySQL user name to use when connecting to server
+        '--password'                        => true,   // Password to use when connecting to server
+        '--protocol'                        => true,   // Connection protocol to use ('TCP','SOCKET','PIPE','MEMORY')
+        '--socket'                          => false,  // For connections to localhost, the Unix socket file to use
     ];
 
     //--------------------------------------------------------------------------
@@ -169,6 +178,19 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('mysqldump', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_UTILITY : self::MERLIN_MYSQLDUMP_UTILITY); // required
         $this->setProperty('repository', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY : self::MERLIN_MYSQLDUMP_REPOSITORY); // required
         $this->setProperty('isMysqldumpEnabled', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::IS_MERLIN_MYSQLDUMP_ENABLED : self::IS_MERLIN_MYSQLDUMP_ENABLED); // required
+        $this->setProperty('backupDirectoryGroup', self::MERLIN_MYSQLDUMP_REPOSITORY_GROUP);
+        $this->setProperty('backupDirectoryPermissions',self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
+        $this->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
+        $this->setProperty('backupDailyBackupPermissions',self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
+
+        /* test override */
+        $this->setProperty('repository', '/Applications/MAMP/project_workshop/project-backup/backup');
+        $this->setProperty('mysqldump', '/Applications/MAMP/Library/bin/mysqldump');
+        $this->setProperty('isMysqldumpEnabled', true);
+        $this->setProperty('backupDirectoryGroup', 'staff');
+        $this->setProperty('backupDirectoryPermissions', 0775);
+        $this->setProperty('backupDailyBackupGroup', 'staff');
+        $this->setProperty('backupDailyBackupPermissions', 0775);
     }
 
     //--------------------------------------------------------------------------
@@ -239,6 +261,14 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
             return $this;
         }
 
+        /* Ensure we have a repository to store our mysqldumps */
+        if (!file_exists($this->repository)) {
+            /* Create our repository and define environmental settings */
+            mkdir($this->repository);
+            chmod($this->repository, $this->getProperty('backupDirectoryPermissions'));
+            chgrp($this->repository, $this->getProperty('backupDirectoryGroup'));
+        }
+
         /*
          * Open ConfigurationVault Settings.
          *
@@ -253,8 +283,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         if (!file_exists($this->backupDirectory)) {
             /* Create our backup in this directory */
             mkdir($this->backupDirectory);
-            chmod($this->backupDirectory, 0770);
-            chgrp($this->backupDirectory, 'link');
+            chmod($this->backupDirectory, $this->getProperty('backupDirectoryPermissions'));
+            chgrp($this->backupDirectory, $this->getProperty('backupDirectoryGroup'));
 
             if ($result !== false) {
                 /* Collect a list of all database table names */
@@ -295,8 +325,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                         );
                     /* Provide error handling here */
                     shell_exec($shellCommand);
-                    chmod($filename, 0660);
-                    chgrp($filename, 'link');
+                    chmod($filename, $this->getProperty('backupDailyBackupPermissions'));
+                    chgrp($filename, $this->getProperty('backupDailyBackupGroup'));
                     touch($filename, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
                 }
                 touch($this->backupDirectory, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
