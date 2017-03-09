@@ -179,18 +179,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('repository', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY : self::MERLIN_MYSQLDUMP_REPOSITORY); // required
         $this->setProperty('isMysqldumpEnabled', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::IS_MERLIN_MYSQLDUMP_ENABLED : self::IS_MERLIN_MYSQLDUMP_ENABLED); // required
         $this->setProperty('backupDirectoryGroup', self::MERLIN_MYSQLDUMP_REPOSITORY_GROUP);
-        $this->setProperty('backupDirectoryPermissions',self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
+        $this->setProperty('backupDirectoryPermissions', self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
         $this->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
-        $this->setProperty('backupDailyBackupPermissions',self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
-
-        /* test override */
-        $this->setProperty('repository', '/Applications/MAMP/project_workshop/project-backup/backup');
-        $this->setProperty('mysqldump', '/Applications/MAMP/Library/bin/mysqldump');
-        $this->setProperty('isMysqldumpEnabled', true);
-        $this->setProperty('backupDirectoryGroup', 'staff');
-        $this->setProperty('backupDirectoryPermissions', 0775);
-        $this->setProperty('backupDailyBackupGroup', 'staff');
-        $this->setProperty('backupDailyBackupPermissions', 0775);
+        $this->setProperty('backupDailyBackupPermissions', self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
     }
 
     //--------------------------------------------------------------------------
