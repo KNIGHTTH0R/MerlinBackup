@@ -14,6 +14,7 @@
     ],
     "require": {
         "php": ">=7.1",
+        "ucsdmath/sftp": "1.16.x-dev",
         "ucsdmath/filesystem": "1.16.x-dev",
         "ucsdmath/configuration-vault": "1.16.x-dev"
     },

@@ -51,10 +51,12 @@ interface MerlinBackupInterface
      * @var string MERLIN_MYSQLDUMP_UTILITY                 The mysqldump utility location on the system
      * @var string MERLIN_MYSQLDUMP_REPOSITORY              The directory repository location (for storage of daily backups)
      * @var string MERLIN_MYSQLDUMP_REPOSITORY_GROUP        The directory group settings for the repository (storage of all daily backups)
-     * @var string MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS  The directory permission settings for the repository (e.g., 0775 - storage of all daily backups)
+     * @var int    MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS  The directory permission settings for the repository (e.g., 0775 - storage of all daily backups)
      * @var string MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP       The directory group settings for the daily backups
-     * @var string MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS The directory permission settings for the daily backups (e.g., 0660)
+     * @var int    MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS The directory permission settings for the daily backups (e.g., 0660)
      * @var bool   IS_MERLIN_MYSQLDUMP_ENABLED              The option to enable file dumps of MySQL tables/databases
+     * @var bool   IS_MERLIN_SFTP_ARCHIVE_ENABLED           The option to enable remote storage of the daily file dumps (MySQL tables/databases)
+     * @var bool   ACCOUNT_VAULT_DESIGNATOR_UCSDMATH        The default account vault designator for storing/cloning daily file dumps (to remote account location)
      */
     public const CHARSET                                    = 'utf-8';
     public const DEFAULT_TIME                               = '060000';
@@ -82,6 +84,9 @@ interface MerlinBackupInterface
     public const MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP         = 'link';
     public const MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS   = 0660;
     public const IS_MERLIN_MYSQLDUMP_ENABLED                = false;
+    public const IS_MERLIN_SFTP_ARCHIVE_ENABLED             = false;
+    public const ACCOUNT_VAULT_DESIGNATOR_UCSDMATH          = 'ucsdmath';
+    public const IS_MERLIN_LOGGING_ENABLED                  = false;
 
     //--------------------------------------------------------------------------
 
