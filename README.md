@@ -1,7 +1,7 @@
 # MerlinBackup
 <table border="0">
   <tr>
-    <td width="300"><img height="240" width="290"alt="UCSDMath - Mathlink" src="https://github.com/ucsdmath/MerlinBackup/blob/master/resource/merlin-backup.png"></td>
+    <td width="300"><img height="240" width="290"alt="UCSDMath - Mathlink" src="https://github.com/ucsdmath/MerlinBackup/blob/master/resource/img/merlin-backup.png"></td>
     <td><h3>A Development Project in PHP</h3><p><strong>UCSDMath</strong> provides a testing framework for general internal Intranet software applications for the UCSD, Department of Mathematics. This is used for development and testing only. [not for production]</p>
 
 <table width="550"><tr><td width="120"><b>Travis CI</b></td><td width="250"><b>SensioLabs</b></td><td width="180"><b>Dependencies</b></td></tr><tr>
