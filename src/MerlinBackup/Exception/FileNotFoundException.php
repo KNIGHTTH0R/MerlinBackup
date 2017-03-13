@@ -31,7 +31,7 @@ class FileNotFoundException extends IOException
      *
      * @api
      */
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.16.0';
 
     //--------------------------------------------------------------------------
 
