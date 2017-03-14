@@ -74,6 +74,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * @var    FilesystemInterface         $filesystem                   The Filesystem Interface
      * @var    ConfigurationVaultInterface $configVault                  The ConfigurationVault Interface
+     * @var    ServiceRequestContainer     $service                      The ServiceRequestContainer Interface
+     * @var    PersistenceInterface        $persist                      The Persistence Interface
      * @var    mysqli_stmt                 $stmt                         The mysqli_stmt statement {object} returns a statement handle for further operations on the statement
      * @var    mysqli                      $mysqli                       The mysqli Interface
      * @var    string                      $sql                          The SQL prepared statement
@@ -88,6 +90,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    string                      $todaysTimestamp              The default timestamp for today (e.g., yyyy-mm-dd 060000)
      * @var    string                      $mysqldump                    The location on the system for the mysqldump utility
      * @var    bool                        $isMysqldumpEnabled           The option to enable file dumps of MySQL tables and databases
+     * @var    bool                        $isLoggingEnabled             The option to provide logging services (internally configured only)
      * @var    string                      $compressionType              The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
      * @var    array                       $compressionFileType          The default file compression types with their associated filename extensions
      * @var    array                       $repositoryArchiveNames       The names of the archived directories located in main repository
@@ -98,6 +101,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      */
     protected $filesystem                   = null;
     protected $configVault                  = null;
+    protected $service                      = null;
+    protected $persist                      = null;
     protected $stmt                         = null;
     protected $mysqli                       = null;
     protected $sql                          = null;
@@ -111,6 +116,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected $todaysTimestamp              = null;
     protected $mysqldump                    = null;
     protected $isMysqldumpEnabled           = null;
+    protected $isLoggingEnabled             = false;
     protected $compressionType              = null;
     protected $repositoryArchiveNames       = null;
     protected $compressionFileType          = ['None' => null, 'GZIP' => '.gz', 'BZIP2' => '.bz2', 'COMPRESS' => '.Z', 'LZMA' => '.lzma'];
@@ -182,6 +188,25 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('backupDirectoryPermissions', self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
         $this->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
         $this->setProperty('backupDailyBackupPermissions', self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
+        $this->startupLoggingServices();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Start logging services.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    protected function startupLoggingServices(): MerlinBackupInterface
+    {
+        if (class_exists('UCSDMath\DependencyInjection\ServiceRequestContainer')) {
+            $this->setProperty('service', \UCSDMath\DependencyInjection\ServiceRequestContainer::serviceConnect());
+            $this->setProperty('persist', $this->service->Persistence);
+            $this->setProperty('isLoggingEnabled', true);
+        }
+
+        return $this;
     }
 
     //--------------------------------------------------------------------------
@@ -322,6 +347,10 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                 }
                 touch($this->backupDirectory, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
             }
+        }
+
+        if (true === $this->isLoggingEnabled) {
+            $this->persist->createSystemLog(sprintf('-- Merlin: Daily database dump availble for: %s', $this->backupDirectory));
         }
 
         return $this;
