@@ -45,11 +45,17 @@ use UCSDMath\Configuration\ConfigurationVault\ConfigurationVaultInterface;
  * (+) void __destruct();
  * (+) MerlinBackupInterface reset();
  * (+) string getUuid(bool $isUpper = true);
+ * (+) MerlinBackupInterface setSkipComments();
+ * (+) MerlinBackupInterface setDontSkipComments();
+ * (+) MerlinBackupInterface setDumpProceduresTriggersFunctionsOnly();
  * (+) MerlinBackupInterface databaseConnect(string $vaultFileDesignator, string $vaultAccountDesignator);
  * (+) MerlinBackupInterface renderDailyMysqlDump(string $vaultAccountDesignator, string $database = null, string $vaultFileDesignator = 'Database');
  * (-) string getCompression();
  * (-) string getCompressionFileType();
  * (-) bool wordContainsDate(string $word);
+ * (-) MerlinBackupInterface startupLoggingServices();
+ * (-) MerlinBackupInterface setConfiguredDumpOptions();
+ * (-) array arrayToDefault(array $array, $value = null);
  * (-) MerlinBackupInterface verifyDatabaseConnection(string $handle = 'mysqli');
  * (-) MerlinBackupInterface setRepositoryArchiveNames(string $sortOrder = 'asc');
  * (-) MerlinBackupInterface setCharacterEncoding(string $charSet = 'utf8mb4', string $handle = 'mysqli');
@@ -97,6 +103,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @static MerlinBackupInterface       $instance                     The static instance MerlinBackupInterface
      * @static int                         $objectCount                  The static count of MerlinBackupInterface
      * @var    array                       $storageRegister              The stored set of data structures used by this class
+     * @var    string                      $dumpType                     The preferred dump type (the database vs. each table in a database)
+     * @var    string                      $configuredDumpOptions        The calculated options used in the mysqldump request
      * @var    array                       $mysqlDumpOptions             The options to use within the mysqldump statement
      */
     protected $filesystem                   = null;
@@ -123,6 +131,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected static $instance              = null;
     protected static $objectCount           = 0;
     protected $storageRegister              = [];
+    protected $dumpType                     = 'tables';  // ['tables', 'database']
+    protected $configuredDumpOptions        = null;
     protected $mysqlDumpOptions             = [
         '--add-drop-database'               => false,  // Add DROP DATABASE statement before each CREATE DATABASE statement
         '--add-drop-table'                  => false,  // Add DROP TABLE statement before each CREATE TABLE statement
@@ -139,10 +149,13 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         '--flush-privileges'                => false,  // Emit a FLUSH PRIVILEGES statement after dumping mysql database
         '--lock-all-tables'                 => false,  // Lock all tables across all databases
         '--lock-tables'                     => false,  // Lock all tables before dumping them
+        '--no-create-db'                    => false,  // Do not write CREATE DATABASE statements
+        '--no-create-info'                  => false,  // Do not write CREATE TABLE statements that re-create each dumped table
         '--no-data'                         => false,  // Do not dump table contents
         '--opt'                             => true,   // Shorthand for --add-drop-table --add-locks --create-options --disable-keys --extended-insert --lock-tables --quick --set-charset.
         '--quick'                           => false,  // Retrieve rows for a table from the server a row at a time
         '--replace'                         => false,  // Write REPLACE statements rather than INSERT statements
+        '--routines'                        => false,  // Dump stored routines (procedures and functions) from dumped databases
         '--set-charset'                     => false,  // Add SET NAMES default_character_set to output
         '--skip-add-drop-table'             => false,  // Do not add a DROP TABLE statement before each CREATE TABLE statement
         '--skip-add-locks'                  => false,  // Do not add locks
@@ -155,12 +168,14 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         '--skip-quote-names'                => false,  // Do not quote identifiers
         '--skip-set-charset'                => false,  // Do not write SET NAMES statement
         '--skip-triggers'                   => false,  // Do not dump triggers
+        '--skip-triggers'                   => false,  // Do not dump triggers (you must specify this option to avoid dumping of triggers)
         '--skip-tz-utc'                     => false,  // Turn off tz-utc
-        '--host'                            => true,   // Host to connect to (IP address or hostname)
-        '--port'                            => true,   // TCP/IP port number to use for connection (e.g., 3306)
-        '--user'                            => true,   // MySQL user name to use when connecting to server
-        '--password'                        => true,   // Password to use when connecting to server
-        '--protocol'                        => true,   // Connection protocol to use ('TCP','SOCKET','PIPE','MEMORY')
+        '--triggers'                        => false,  // Dump triggers for each dumped table (this is Default)
+        '--host'                            => false,  // Host to connect to (IP address or hostname)
+        '--port'                            => false,  // TCP/IP port number to use for connection (e.g., 3306)
+        '--user'                            => false,  // MySQL user name to use when connecting to server
+        '--password'                        => false,  // Password to use when connecting to server
+        '--protocol'                        => false,  // Connection protocol to use ('TCP','SOCKET','PIPE','MEMORY')
         '--socket'                          => false,  // For connections to localhost, the Unix socket file to use
     ];
 
@@ -189,6 +204,116 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
         $this->setProperty('backupDailyBackupPermissions', self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
         $this->startupLoggingServices();
+        $this->setConfiguredDumpOptions();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Reset to default settings.
+     *
+     * @return MerlinBackupInterface The current instance
+     *
+     * @api
+     */
+    public function reset(): MerlinBackupInterface
+    {
+        return $this
+            ->setProperty('mysqlDumpOptions', $this->arrayToDefault($this->mysqlDumpOptions, false))
+                ->setProperty('mysqlDumpOptions', true, '--opt')
+                    ->setProperty('mysqlDumpOptions', true, '--compact')
+                        ->setProperty('mysqlDumpOptions', true, '--comments')
+                            ->setProperty('dumpType', 'tables')
+                                ->setProperty('storageRegister', array())
+                                    ->setProperty('configuredDumpOptions', null);
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Setup options for the backup of Triggers, Functions, and Procedures only for a database dump.
+     *
+     * {@internal looking for something like:
+     *    mysqldump --routines --no-create-info --no-data --no-create-db --skip-opt <database> > outputfile.sql } 
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    public function setDumpProceduresTriggersFunctionsOnly(): MerlinBackupInterface
+    {
+        return $this
+            ->setProperty('dumpType', 'database')
+                ->setProperty('mysqlDumpOptions', true, '--routines')
+                    ->setProperty('mysqlDumpOptions', true, '--no-data')
+                        ->setProperty('mysqlDumpOptions', true, '--skip-opt')
+                            ->setProperty('mysqlDumpOptions', true, '--no-create-db')
+                                ->setProperty('mysqlDumpOptions', true, '--no-create-info')
+                                    ->setProperty('mysqlDumpOptions', false, '--opt')
+                                        ->setConfiguredDumpOptions();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Add comments to mysqldump files.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    public function setDontSkipComments(): MerlinBackupInterface
+    {
+        return $this
+            ->setProperty('mysqlDumpOptions', false, '--skip-comments')
+                ->setConfiguredDumpOptions();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Do not add comments to mysqldump files.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    public function setSkipComments(): MerlinBackupInterface
+    {
+        return $this
+            ->setProperty('mysqlDumpOptions', true, '--skip-comments')
+                ->setConfiguredDumpOptions();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Set the configured dump options for a msqldump.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    protected function setConfiguredDumpOptions(): MerlinBackupInterface
+    {
+        $configuredDumpOptions = [];
+
+        foreach ($this->mysqlDumpOptions as $key => $value) {
+            if (true === $value) {
+                $configuredDumpOptions[] = $key;
+            }
+        }
+
+        return $this->setProperty('configuredDumpOptions', implode(' ', $configuredDumpOptions));
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Reset an array to default settings.
+     *
+     * @param bool $array The array to set item values to some default value
+     * @param bool $value The default value to set
+     *
+     * @return array The array with all keys set to the value provided
+     *
+     * @api
+     */
+    protected function arrayToDefault(array $array, $value = null): array
+    {
+        return array_fill_keys(array_keys($array), $value);
     }
 
     //--------------------------------------------------------------------------
@@ -206,21 +331,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
             $this->setProperty('isLoggingEnabled', true);
         }
 
-        return $this;
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Reset to default settings.
-     *
-     *
-     * @return MerlinBackupInterface The current instance
-     *
-     * @api
-     */
-    public function reset(): MerlinBackupInterface
-    {
         return $this;
     }
 
@@ -313,8 +423,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
 
                     $shellCommand = 'TCP' === $this->get('protocol')
                         ? sprintf(
-                            '%s --opt --compact --comments --host=%s --port=%s --protocol=%s --user=%s --password=%s %s %s %s %s > %s',
+                            '%s %s --host=%s --port=%s --protocol=%s --user=%s --password=%s %s %s %s %s > %s',
                             $this->mysqldump,
+                            $this-configuredDumpOptions,  // Default (--opt --compact --comments)
                             $this->get('hostname'),
                             $this->get('port'),
                             $this->get('protocol'),
@@ -327,8 +438,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                             $filename
                         )
                         : sprintf(
-                            '%s --opt --compact --comments --host=%s --port=%s --user=%s --password=%s %s %s %s %s > %s',
+                            '%s %s --host=%s --port=%s --user=%s --password=%s %s %s %s %s > %s',
                             $this->mysqldump,
+                            $this-configuredDumpOptions,  // Default (--opt --compact --comments)
                             self::DEFAULT_MYSQL_HOSTNAME,
                             $this->get('port'),
                             $this->get('username'),
