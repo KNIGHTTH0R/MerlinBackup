@@ -234,7 +234,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * Setup options for the backup of Triggers, Functions, and Procedures only for a database dump.
      *
      * {@internal looking for something like:
-     *    mysqldump --routines --no-create-info --no-data --no-create-db --skip-opt <database> > outputfile.sql } 
+     *    mysqldump --routines --no-create-info --no-data --no-create-db --skip-opt <database> > outputfile.sql }
      *
      * @return MerlinBackupInterface The current instance
      */
