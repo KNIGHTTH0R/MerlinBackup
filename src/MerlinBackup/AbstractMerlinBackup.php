@@ -615,16 +615,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      */
     public function databaseConnect(string $vaultFileDesignator, string $vaultAccountDesignator): MerlinBackupInterface
     {
-        $this->configVault->reset()->openVaultFile($vaultFileDesignator, $vaultAccountDesignator);
-        $this
-            ->set('hostname', $this->configVault->get('database_host'))
-                ->set('username', $this->configVault->get('database_username'))
-                    ->set('password', $this->configVault->get('database_password'))
-                        ->set('database', $this->configVault->get('database_name'))
-                            ->set('port', $this->configVault->get('database_port'))
-                                ->set('socket', $this->configVault->get('database_socket'))
-                                    ->set('protocol', $this->configVault->get('database_protocol'))
-                                        ->set('charset', $this->configVault->get('database_charset'));
+        $this->setVaultConnectionCredentials($vaultFileDesignator, $vaultAccountDesignator);
         $this->mysqli = new mysqli(
             (string) $this->get('hostname'),
             (string) $this->get('username'),
@@ -633,12 +624,31 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
             (int)    $this->get('port')
             // (string) $this->get('socket')
         );
-        $this->verifyDatabaseConnection()
-            ->setCharacterEncoding($this->get('charset'))
-                ->configVault
-                    ->clear();
 
-        return $this;
+        return $this->verifyDatabaseConnection()->setCharacterEncoding($this->get('charset'))->configVault->clear();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Setup database credentials for the connection.
+     *
+     * @param string $vaultFileDesignator    The Configuration Vault file designator ['Database','Account','Administrator','SMTP']
+     * @param string $vaultAccountDesignator The Configuration Vault database user account ['root','webadmin','johndeere', etc.]
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    protected function setVaultConnectionCredentials(string $vaultFileDesignator, string $vaultAccountDesignator): MerlinBackupInterface
+    {
+        $this->configVault->reset()->openVaultFile($vaultFileDesignator, $vaultAccountDesignator);
+        return $this->set('hostname', $this->configVault->get('database_host'))
+            ->set('username', $this->configVault->get('database_username'))
+                ->set('password', $this->configVault->get('database_password'))
+                    ->set('database', $this->configVault->get('database_name'))
+                        ->set('port', $this->configVault->get('database_port'))
+                            ->set('socket', $this->configVault->get('database_socket'))
+                                ->set('protocol', $this->configVault->get('database_protocol'))
+                                    ->set('charset', $this->configVault->get('database_charset'));
     }
 
     //--------------------------------------------------------------------------
