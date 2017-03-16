@@ -49,7 +49,9 @@ interface MerlinBackupInterface
      * @var string DEFAULT_COMPRESSION_TYPE                 The default compression scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
      * @var bool   IS_COMPRESSION_ENABLED                   The option to enable compression of MySQL tables and database dump files
      * @var string MERLIN_MYSQLDUMP_UTILITY                 The mysqldump utility location on the system
+     * @var string MERLIN_MYSQL_UTILITY                     The mysql utility location on the system
      * @var string MERLIN_MYSQLDUMP_REPOSITORY              The directory repository location (for storage of daily backups)
+     * @var int    MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME   The time in days to expire the repository archives (e.g., 365)
      * @var string MERLIN_MYSQLDUMP_REPOSITORY_GROUP        The directory group settings for the repository (storage of all daily backups)
      * @var int    MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS  The directory permission settings for the repository (e.g., 0775 - storage of all daily backups)
      * @var string MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP       The directory group settings for the daily backups
@@ -78,7 +80,9 @@ interface MerlinBackupInterface
     public const DEFAULT_COMPRESSION_TYPE                   = 'GZIP';
     public const IS_COMPRESSION_ENABLED                     = true;
     public const MERLIN_MYSQLDUMP_UTILITY                   = '/usr/bin/mysqldump';
+    public const MERLIN_MYSQL_UTILITY                       = '/usr/bin/mysql';
     public const MERLIN_MYSQLDUMP_REPOSITORY                = '/home/link/backup';
+    public const MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME     = 365;
     public const MERLIN_MYSQLDUMP_REPOSITORY_GROUP          = 'link';
     public const MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS    = 0770;
     public const MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP         = 'link';

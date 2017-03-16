@@ -86,6 +86,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    mysqli                      $mysqli                       The mysqli Interface
      * @var    string                      $sql                          The SQL prepared statement
      * @var    string                      $repository                   The place or directory where database tables are held
+     * @var    int                         $repositoryExpireTime         The time in days to expire the repository archives (e.g., 365)
      * @var    string                      $backupDirectory              The place or directory where daily backups are stored
      * @var    string                      $backupDirectory              The directory repository location (for storage of daily backups)
      * @var    string                      $backupDirectoryGroup         The directory group settings for the repository (storage of all daily backups)
@@ -115,6 +116,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected $mysqli                       = null;
     protected $sql                          = null;
     protected $repository                   = null;
+    protected $repositoryExpireTime         = null;
     protected $backupDirectory              = null;
     protected $backupDailyBackupGroup       = null;
     protected $backupDailyBackupPermissions = null;
@@ -123,6 +125,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected $todaysDate                   = null;
     protected $todaysTimestamp              = null;
     protected $mysqldump                    = null;
+    protected $mysql                        = null;
     protected $isMysqldumpEnabled           = null;
     protected $isLoggingEnabled             = false;
     protected $compressionType              = null;
@@ -197,7 +200,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('compressionType', self::DEFAULT_COMPRESSION_TYPE);
         $this->setProperty('todaysTimestamp', sprintf('%s %s', date('Y-m-d'), self::DEFAULT_TIME));
         $this->setProperty('mysqldump', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_UTILITY : self::MERLIN_MYSQLDUMP_UTILITY); // required
+        $this->setProperty('mysql', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQL_UTILITY : self::MERLIN_MYSQL_UTILITY); // required
         $this->setProperty('repository', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY : self::MERLIN_MYSQLDUMP_REPOSITORY); // required
+        $this->setProperty('repositoryExpireTime', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME : self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME); // required
         $this->setProperty('isMysqldumpEnabled', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::IS_MERLIN_MYSQLDUMP_ENABLED : self::IS_MERLIN_MYSQLDUMP_ENABLED); // required
         $this->setProperty('backupDirectoryGroup', self::MERLIN_MYSQLDUMP_REPOSITORY_GROUP);
         $this->setProperty('backupDirectoryPermissions', self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
@@ -302,12 +307,12 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
-     * Reset an array to default settings.
+     * Reset all array keys to a default setting value.
      *
-     * @param bool $array The array to set item values to some default value
-     * @param bool $value The default value to set
+     * @param bool  $array The array to set item values to some default value
+     * @param mixed $value The default value to set
      *
-     * @return array The array with all keys set to the value provided
+     * @return array The array with all keys set to the same value
      *
      * @api
      */
@@ -351,7 +356,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * @param bool $isUpper The option to modify text case [upper, lower]
      *
-     * @return string The random UUID
+     * @return string The random UUID v.4
      *
      * @api
      */
@@ -487,7 +492,10 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
-     * Set the names of the archived directories located in main repository.
+     * Set the names of the archived directories located in the main repository.
+     *
+     * The names are defined by ISO formatted dates followed by the database name.
+     *    Example: 2017-03-12-johndeere_equipment_database
      *
      * @param string $sortOrder The sort order of the list items ('asc','desc')
      *
@@ -509,6 +517,49 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         $this->setProperty('repositoryArchiveNames', $archiveListing);
 
         return $this;
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Provide a list of old archive names from an array.
+     *
+     * The names are defined by ISO formatted dates followed by the database name.
+     *    Example: 2017-03-12-johndeere_equipment_database
+     *
+     * @param array $isodatelist The list of dates (ISO formatted)
+     * @param array $expireTime  The days from today to expire archive
+     *
+     * @return array The filtered result array
+     */
+    protected function listOldArchives(array $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): array
+    {
+        $currentArchiveList = [];
+        $expireTime = null === $this->repositoryExpireTime ? $expireTime : $this->repositoryExpireTime;
+        $archiveDate = date('Y-m-d', strtotime(sprintf('-%s days', $expireTime)));
+
+        foreach ($isodatelist as $date) {
+            if ($date > $archiveDate && preg_match("^[0-9]{4}-[0-1][0-9]-[0-3][0-9]", $date)) {
+                $currentArchiveList[] = $date;
+            }
+        }
+
+        return array_diff($isodatelist, $currentArchiveList);
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Delete an item value from an array.
+     *
+     * @param string $item      The string item value to delete
+     * @param array  $arrayList The array list to check
+     *
+     * @return array The filtered result array
+     */
+    protected function arrayDelete(string $item, array $arrayList): array
+    {
+        return array_diff($arrayList, array($item));
     }
 
     //--------------------------------------------------------------------------
@@ -565,7 +616,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     public function databaseConnect(string $vaultFileDesignator, string $vaultAccountDesignator): MerlinBackupInterface
     {
         $this->configVault->reset()->openVaultFile($vaultFileDesignator, $vaultAccountDesignator);
-
         $this
             ->set('hostname', $this->configVault->get('database_host'))
                 ->set('username', $this->configVault->get('database_username'))
@@ -575,7 +625,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                                 ->set('socket', $this->configVault->get('database_socket'))
                                     ->set('protocol', $this->configVault->get('database_protocol'))
                                         ->set('charset', $this->configVault->get('database_charset'));
-
         $this->mysqli = new mysqli(
             (string) $this->get('hostname'),
             (string) $this->get('username'),
@@ -584,7 +633,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
             (int)    $this->get('port')
             // (string) $this->get('socket')
         );
-
         $this->verifyDatabaseConnection()
             ->setCharacterEncoding($this->get('charset'))
                 ->configVault
