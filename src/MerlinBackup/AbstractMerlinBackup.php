@@ -87,7 +87,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    string                      $sql                          The SQL prepared statement
      * @var    string                      $repository                   The place or directory where database tables are held
      * @var    int                         $repositoryExpireTime         The time in days to expire the repository archives (e.g., 365)
-     * @var    string                      $backupDirectory              The place or directory where daily backups are stored
+     * @var    string                      $databaseDirectory            The group location for storing related database dumps
      * @var    string                      $backupDirectory              The directory repository location (for storage of daily backups)
      * @var    string                      $backupDirectoryGroup         The directory group settings for the repository (storage of all daily backups)
      * @var    int                         $backupDirectoryPermissions   The directory permission settings for the repository (e.g., 0775 - storage of all daily backups)
@@ -116,7 +116,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected $mysqli                       = null;
     protected $sql                          = null;
     protected $repository                   = null;
+
     protected $repositoryExpireTime         = null;
+    protected $databaseDirectory            = null;
     protected $backupDirectory              = null;
     protected $backupDailyBackupGroup       = null;
     protected $backupDailyBackupPermissions = null;
@@ -393,11 +395,11 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         }
 
         /* Ensure we have a repository to store our mysqldumps */
-        if (!file_exists($this->repository)) {
+        if (!$this->filesystem->exists($this->repository)) {
             /* Create our repository and define environmental settings */
-            mkdir($this->repository);
-            chmod($this->repository, $this->getProperty('backupDirectoryPermissions'));
-            chgrp($this->repository, $this->getProperty('backupDirectoryGroup'));
+            $this->filesystem->mkdir($this->repository);
+            $this->filesystem->chmod($this->repository, $this->getProperty('backupDirectoryPermissions'));
+            $this->filesystem->chgrp($this->repository, $this->getProperty('backupDirectoryGroup'));
         }
 
         /*
@@ -408,14 +410,23 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
          */
         $result = $this->databaseConnect($vaultFileDesignator, $vaultAccountDesignator)->mysqli->query('SHOW TABLES');
         $database = null === $database ? $this->get('database') : $database;
-        $this->setProperty('backupDirectory', sprintf('%s/%s-%s', $this->repository, $this->todaysDate, $database));
+        $this->setProperty('databaseDirectory', sprintf('%s/%s', $this->repository, $database));
+        $this->setProperty('backupDirectory', sprintf('/%s/%s-%s', $this->databaseDirectory, $this->todaysDate, $database));
+
+        /* Ensure we have a database directory in the repository for storing daily mysqldumps */
+        if (!$this->filesystem->exists($this->databaseDirectory)) {
+            /* Create our repository and define environmental settings */
+            $this->filesystem->mkdir($this->databaseDirectory);
+            $this->filesystem->chmod($this->databaseDirectory, $this->getProperty('backupDirectoryPermissions'));
+            $this->filesystem->chgrp($this->databaseDirectory, $this->getProperty('backupDirectoryGroup'));
+        }
 
         /* Check if our daily backup exists, if so, do nothing. */
-        if (!file_exists($this->backupDirectory)) {
+        if (!$this->filesystem->exists($this->backupDirectory)) {
             /* Create our backup in this directory */
-            mkdir($this->backupDirectory);
-            chmod($this->backupDirectory, $this->getProperty('backupDirectoryPermissions'));
-            chgrp($this->backupDirectory, $this->getProperty('backupDirectoryGroup'));
+            $this->filesystem->mkdir($this->backupDirectory);
+            $this->filesystem->chmod($this->backupDirectory, $this->getProperty('backupDirectoryPermissions'));
+            $this->filesystem->chgrp($this->backupDirectory, $this->getProperty('backupDirectoryGroup'));
 
             if ($result !== false) {
                 /* Collect a list of all database table names */
@@ -430,7 +441,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                         ? sprintf(
                             '%s %s --host=%s --port=%s --protocol=%s --user=%s --password=%s %s %s %s %s > %s',
                             $this->mysqldump,
-                            $this-configuredDumpOptions,  // Default (--opt --compact --comments)
+                            $this->configuredDumpOptions,  // Default (--opt --compact --comments)
                             $this->get('hostname'),
                             $this->get('port'),
                             $this->get('protocol'),
@@ -445,7 +456,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                         : sprintf(
                             '%s %s --host=%s --port=%s --user=%s --password=%s %s %s %s %s > %s',
                             $this->mysqldump,
-                            $this-configuredDumpOptions,  // Default (--opt --compact --comments)
+                            $this->configuredDumpOptions,  // Default (--opt --compact --comments)
                             self::DEFAULT_MYSQL_HOSTNAME,
                             $this->get('port'),
                             $this->get('username'),
@@ -458,11 +469,11 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                         );
                     /* Provide error handling here */
                     shell_exec($shellCommand);
-                    chmod($filename, $this->getProperty('backupDailyBackupPermissions'));
-                    chgrp($filename, $this->getProperty('backupDailyBackupGroup'));
-                    touch($filename, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
+                    $this->filesystem->chmod($filename, $this->getProperty('backupDailyBackupPermissions'));
+                    $this->filesystem->chgrp($filename, $this->getProperty('backupDailyBackupGroup'));
+                    $this->filesystem->touch($filename, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
                 }
-                touch($this->backupDirectory, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
+                $this->filesystem->touch($this->backupDirectory, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
             }
         }
 
@@ -624,8 +635,9 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
             (int)    $this->get('port')
             // (string) $this->get('socket')
         );
+        $this->verifyDatabaseConnection()->setCharacterEncoding($this->get('charset'))->configVault->clear();
 
-        return $this->verifyDatabaseConnection()->setCharacterEncoding($this->get('charset'))->configVault->clear();
+        return $this;
     }
 
     //--------------------------------------------------------------------------
