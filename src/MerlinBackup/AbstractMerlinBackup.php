@@ -557,7 +557,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * @return array The filtered result array
      */
-    protected function arrayDelete(string $item, array $arrayList): array
+    protected function arrayDeleteItem(string $item, array $arrayList): array
     {
         return array_diff($arrayList, array($item));
     }
