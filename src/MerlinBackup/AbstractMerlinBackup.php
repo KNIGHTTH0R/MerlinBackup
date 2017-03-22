@@ -22,6 +22,10 @@ use UCSDMath\MerlinBackup\Exception\MerlinBackupException;
 use UCSDMath\MerlinBackup\Exception\FileNotFoundException;
 use UCSDMath\MerlinBackup\ExtendedOperations\ServiceFunctions;
 use UCSDMath\MerlinBackup\ExtendedOperations\ServiceFunctionsInterface;
+use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupCloneOperations;
+use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupCloneOperationsInterface;
+use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupAccountOperations;
+use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupAccountOperationsInterface;
 use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupStandardOperations;
 use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupStandardOperationsInterface;
 use UCSDMath\MerlinBackup\ExtendedOperations\MerlinBackupServiceMethods;
@@ -116,7 +120,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected $mysqli                       = null;
     protected $sql                          = null;
     protected $repository                   = null;
-
     protected $repositoryExpireTime         = null;
     protected $databaseDirectory            = null;
     protected $backupDirectory              = null;
@@ -196,16 +199,22 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      */
     public function __construct(FilesystemInterface $filesystem, ConfigurationVaultInterface $configVault)
     {
-        $this->setProperty('filesystem', $filesystem)->setProperty('configVault', $configVault)->setProperty('todaysDate', date('Y-m-d'))
-            ->setProperty('compressionType', self::DEFAULT_COMPRESSION_TYPE)->setProperty('todaysTimestamp', sprintf('%s %s', date('Y-m-d'), self::DEFAULT_TIME))
-            ->setProperty('mysqldump', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_UTILITY : self::MERLIN_MYSQLDUMP_UTILITY); // required
+        $this->setProperty('filesystem', $filesystem);
+        $this->setProperty('configVault', $configVault);
+        $this->setProperty('todaysDate', date('Y-m-d'));
+        $this->setProperty('compressionType', self::DEFAULT_COMPRESSION_TYPE);
+        $this->setProperty('todaysTimestamp', sprintf('%s %s', date('Y-m-d'), self::DEFAULT_TIME));
+        $this->setProperty('mysqldump', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_UTILITY : self::MERLIN_MYSQLDUMP_UTILITY); // required
         $this->setProperty('mysql', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQL_UTILITY : self::MERLIN_MYSQL_UTILITY); // required
         $this->setProperty('repository', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY : self::MERLIN_MYSQLDUMP_REPOSITORY); // required
         $this->setProperty('repositoryExpireTime', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME : self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME); // required
         $this->setProperty('isMysqldumpEnabled', class_exists('\\UCSDMath\\Configuration\\Config') ? Config::IS_MERLIN_MYSQLDUMP_ENABLED : self::IS_MERLIN_MYSQLDUMP_ENABLED); // required
         $this->setProperty('backupDirectoryGroup', self::MERLIN_MYSQLDUMP_REPOSITORY_GROUP);
-        $this->setProperty('backupDirectoryPermissions', self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS)->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
-        $this->setProperty('backupDailyBackupPermissions', self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS)->startupLoggingServices()->setConfiguredDumpOptions();
+        $this->setProperty('backupDirectoryPermissions', self::MERLIN_MYSQLDUMP_REPOSITORY_PERMISSIONS);
+        $this->setProperty('backupDailyBackupGroup', self::MERLIN_MYSQLDUMP_DAILYBACKUP_GROUP);
+        $this->setProperty('backupDailyBackupPermissions', self::MERLIN_MYSQLDUMP_DAILYBACKUP_PERMISSIONS);
+        $this->startupLoggingServices();
+        $this->setConfiguredDumpOptions();
     }
 
     //--------------------------------------------------------------------------
@@ -513,6 +522,26 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * (-) bool isReadable(string $filename);
      */
     use MerlinBackupStandardOperations;
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Method implementations inserted:
+     *
+     * Method list: (+) @api, (-) protected or private visibility.
+     *
+     */
+    use MerlinBackupCloneOperations;
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Method implementations inserted:
+     *
+     * Method list: (+) @api, (-) protected or private visibility.
+     *
+     */
+    use MerlinBackupAccountOperations;
 
     //--------------------------------------------------------------------------
 
