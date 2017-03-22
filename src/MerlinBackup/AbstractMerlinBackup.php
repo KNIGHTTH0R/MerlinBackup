@@ -422,22 +422,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
-     * Verify database connection.
-     *
-     * @param string $handle The defined API connection handler
-     *
-     * @return string The command to pipe through
-     *
-     * @api
-     */
-    protected function getCompressionFileType(): string
-    {
-        return (string) $this->compressionFileType[$this->compressionType];
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
      * Establish a database connection.
      *
      * @param string $vaultFileDesignator    The Configuration Vault file designator ['Database','Account','Administrator','SMTP']

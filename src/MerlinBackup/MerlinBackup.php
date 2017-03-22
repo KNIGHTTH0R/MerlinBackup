@@ -197,6 +197,22 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
     //--------------------------------------------------------------------------
 
     /**
+     * Verify database connection.
+     *
+     * @param string $handle The defined API connection handler
+     *
+     * @return string The command to pipe through
+     *
+     * @api
+     */
+    protected function getCompressionFileType(): string
+    {
+        return (string) $this->compressionFileType[$this->compressionType];
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
      * Get a random hex string (CSPRNG Requires PHP v7.x).
      *
      * @param int $length The length of the token
