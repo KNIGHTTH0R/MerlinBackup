@@ -255,122 +255,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
-     * Add comments to mysqldump files.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    public function setDontSkipComments(): MerlinBackupInterface
-    {
-        return $this
-            ->setProperty('mysqlDumpOptions', false, '--skip-comments')
-                ->setConfiguredDumpOptions();
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Do not add comments to mysqldump files.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    public function setSkipComments(): MerlinBackupInterface
-    {
-        return $this
-            ->setProperty('mysqlDumpOptions', true, '--skip-comments')
-                ->setConfiguredDumpOptions();
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Set the configured dump options for a msqldump.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    protected function setConfiguredDumpOptions(): MerlinBackupInterface
-    {
-        $configuredDumpOptions = [];
-
-        foreach ($this->mysqlDumpOptions as $key => $value) {
-            if (true === $value) {
-                $configuredDumpOptions[] = $key;
-            }
-        }
-
-        return $this->setProperty('configuredDumpOptions', implode(' ', $configuredDumpOptions));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Reset all array keys to a default setting value.
-     *
-     * @param bool  $array The array to set item values to some default value
-     * @param mixed $value The default value to set
-     *
-     * @return array The array with all keys set to the same value
-     *
-     * @api
-     */
-    protected function arrayToDefault(array $array, $value = null): array
-    {
-        return array_fill_keys(array_keys($array), $value);
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Start logging services.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    protected function startupLoggingServices(): MerlinBackupInterface
-    {
-        if (class_exists('UCSDMath\DependencyInjection\ServiceRequestContainer')) {
-            $this->setProperty('service', \UCSDMath\DependencyInjection\ServiceRequestContainer::serviceConnect());
-            $this->setProperty('persist', $this->service->Persistence);
-            $this->setProperty('isLoggingEnabled', true);
-        }
-
-        return $this;
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Return a unique v4 UUID (requires: ^PHP7).
-     *
-     * Generate random block of data and change the individual byte positions.
-     * Decided not to use mt_rand() as a number generator (experienced collisions).
-     *
-     * According to RFC 4122 - Section 4.4, you need to change the following
-     *    1) time_hi_and_version (bits 4-7 of 7th octet),
-     *    2) clock_seq_hi_and_reserved (bit 6 & 7 of 9th octet)
-     *
-     * All of the other 122 bits should be sufficiently random.
-     * {@see http://tools.ietf.org/html/rfc4122#section-4.4}
-     *
-     * @param bool $isUpper The option to modify text case [upper, lower]
-     *
-     * @return string The random UUID v.4
-     *
-     * @api
-     */
-    public function getUuid(bool $isUpper = true): string
-    {
-        $data = random_bytes(16);
-        assert(strlen($data) === 16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return true === $isUpper
-            ? strtoupper(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)))
-            : vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
      * Render Daily Dumps to Storage Area.
      *
      * @param string $vaultAccountDesignator The Configuration Vault database user account ['root','webadmin','johndeere', etc.]
@@ -481,22 +365,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
-     * Verify database connection.
-     *
-     * @return string The compression type used with pipe
-     *
-     * @api
-     */
-    protected function getCompression(): string
-    {
-        return 'None' === $this->compressionType
-            ? (string) null
-            : sprintf('| %s', strtolower($this->compressionType));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
      * Set the names of the archived directories located in the main repository.
      *
      * The names are defined by ISO formatted dates followed by the database name.
@@ -549,44 +417,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         }
 
         return array_diff($isodatelist, $currentArchiveList);
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Delete an item value from an array.
-     *
-     * @param string $item      The string item value to delete
-     * @param array  $arrayList The array list to check
-     *
-     * @return array The filtered result array
-     */
-    protected function arrayDeleteItem(string $item, array $arrayList): array
-    {
-        return array_diff($arrayList, array($item));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Verify that a string contains/begins with a date.
-     *
-     * Regex options for (yyyy-mm-dd) either contains or begins with:
-     *    + preg_match('/\b(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
-     *    + preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
-     *
-     * @param string $word The string that may have a format date listing (e.g., yyyy-mm-dd)
-     *
-     * @return bool The result
-     */
-    protected function wordContainsDate(string $word): bool
-    {
-        /* Begins with a valid date: yyy-mm-dd */
-        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)) {
-            return checkdate((int) $parts[2], (int) $parts[3], (int) $parts[1]);
-        }
-
-        return false;
     }
 
     //--------------------------------------------------------------------------
@@ -654,43 +484,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                             ->set('socket', $this->configVault->get('database_socket'))
                                 ->set('protocol', $this->configVault->get('database_protocol'))
                                     ->set('charset', $this->configVault->get('database_charset'));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Verify database connection.
-     *
-     * @param string $handle The defined API connection handler
-     *
-     * @return MerlinBackupInterface The current instance
-     *
-     * @api
-     */
-    protected function verifyDatabaseConnection(string $handle = 'mysqli'): MerlinBackupInterface
-    {
-        return 0 === $this->{$handle}->connect_errno
-            ? $this
-            : MerlinBackupException("Connection could not be established to Database ({$this->{$handle}->connect_error}). [S104]");
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Set the default character set for the database.
-     *
-     * @param string $charSet The default character set used in communicating with the database
-     * @param string $handle  The defined API connection handler
-     *
-     * @return MerlinBackupInterface The current instance
-     *
-     * @api
-     */
-    protected function setCharacterEncoding(string $charSet = 'utf8mb4', string $handle = 'mysqli'): MerlinBackupInterface
-    {
-        return true === $this->{$handle}->set_charset($charSet)
-            ? $this
-            : MerlinBackupException("Error setting a default character set {$charSet}. Required when sending data to and from the database server. [A103]");
     }
 
     //--------------------------------------------------------------------------
