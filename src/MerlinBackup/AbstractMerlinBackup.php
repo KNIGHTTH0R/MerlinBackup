@@ -540,7 +540,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     protected function listOldArchives(array $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): array
     {
         $expireTime = null === $this->repositoryExpireTime ? $expireTime : $this->repositoryExpireTime;
-        [$currentArchiveList, $archiveDate] = [array(), date('Y-m-d', strtotime(sprintf('-%s days', $expireTime)))];
+        $archiveDate = date('Y-m-d', strtotime(sprintf('-%s days', $expireTime)));
+        $currentArchiveList = [];
         foreach ($isodatelist as $date) {
             if ($date > $archiveDate && preg_match("^[0-9]{4}-[0-1][0-9]-[0-3][0-9]", $date)) {
                 $currentArchiveList[] = $date;
