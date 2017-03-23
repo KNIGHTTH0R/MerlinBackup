@@ -59,7 +59,7 @@ use UCSDMath\Configuration\ConfigurationVault\ConfigurationVaultInterface;
  * (-) bool wordContainsDate(string $word);
  * (-) MerlinBackupInterface startupLoggingServices();
  * (-) MerlinBackupInterface setConfiguredDumpOptions();
- * (-) array arrayToDefault(array $array, $value = null);
+ * (-) iterable arrayToDefault(iterable $array, $value = null);
  * (-) MerlinBackupInterface verifyDatabaseConnection(string $handle = 'mysqli');
  * (-) MerlinBackupInterface setRepositoryArchiveNames(string $sortOrder = 'asc');
  * (-) MerlinBackupInterface setCharacterEncoding(string $charSet = 'utf8mb4', string $handle = 'mysqli');
@@ -103,14 +103,14 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    bool                        $isMysqldumpEnabled           The option to enable file dumps of MySQL tables and databases
      * @var    bool                        $isLoggingEnabled             The option to provide logging services (internally configured only)
      * @var    string                      $compressionType              The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
-     * @var    array                       $compressionFileType          The default file compression types with their associated filename extensions
-     * @var    array                       $repositoryArchiveNames       The names of the archived directories located in main repository
+     * @var    iterable                    $compressionFileType          The default file compression types with their associated filename extensions
+     * @var    iterable                    $repositoryArchiveNames       The names of the archived directories located in main repository
      * @static MerlinBackupInterface       $instance                     The static instance MerlinBackupInterface
      * @static int                         $objectCount                  The static count of MerlinBackupInterface
-     * @var    array                       $storageRegister              The stored set of data structures used by this class
+     * @var    iterable                    $storageRegister              The stored set of data structures used by this class
      * @var    string                      $dumpType                     The preferred dump type (the database vs. each table in a database)
      * @var    string                      $configuredDumpOptions        The calculated options used in the mysqldump request
-     * @var    array                       $mysqlDumpOptions             The options to use within the mysqldump statement
+     * @var    iterable                    $mysqlDumpOptions             The options to use within the mysqldump statement
      */
     protected $filesystem                   = null;
     protected $configVault                  = null;
@@ -409,12 +409,12 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * The names are defined by ISO formatted dates followed by the database name.
      *    Example: 2017-03-12-johndeere_equipment_database
      *
-     * @param array $isodatelist The list of dates (ISO formatted)
-     * @param array $expireTime  The days from today to expire archive
+     * @param iterable $isodatelist The list of dates (ISO formatted)
+     * @param iterable $expireTime  The days from today to expire archive
      *
-     * @return array The filtered result array
+     * @return iterable The filtered result
      */
-    protected function listOldArchives(array $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): array
+    protected function listOldArchives(iterable $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): iterable
     {
         $expireTime = null === $this->repositoryExpireTime ? $expireTime : $this->repositoryExpireTime;
         $archiveDate = date('Y-m-d', strtotime(sprintf('-%s days', $expireTime)));
@@ -498,58 +498,6 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * Method list: (+) @api, (-) protected or private visibility.
      *
-     * (-) Traversable toIterator($files);
-     */
-    use MerlinBackupServiceMethods;
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Method implementations inserted:
-     *
-     * Method list: (+) @api, (-) protected or private visibility.
-     *
-     * (+) bool exists($files);
-     * (+) string getUniqueId(int $length = 16);
-     * (+) string reverseString(string $payload);
-     * (+) string numberToString(string $payload);
-     * (+) string stringToNumber(string $payload);
-     * (+) string repeatString(string $str, int $number);
-     * (+) string getSha512(string $data = null, bool $isUpper = true);
-     * (+) string randomToken(int $length = 32, string $chars = self::PASSWORD_TOKENS);
-     * (+) int getRandomInt(int $min = self::MIN_RANDOM_INT, int $max = self::MAX_RANDOM_INT);
-     * (-) int stringSize(string $payload);
-     * (-) bool isReadable(string $filename);
-     */
-    use MerlinBackupStandardOperations;
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Method implementations inserted:
-     *
-     * Method list: (+) @api, (-) protected or private visibility.
-     *
-     */
-    use MerlinBackupCloneOperations;
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Method implementations inserted:
-     *
-     * Method list: (+) @api, (-) protected or private visibility.
-     *
-     */
-    use MerlinBackupAccountOperations;
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Method implementations inserted:
-     *
-     * Method list: (+) @api, (-) protected or private visibility.
-     *
      * (+) iterable all();
      * (+) object init();
      * (+) string version();
@@ -557,8 +505,8 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * (+) bool has(string $key);
      * (+) string getClassName();
      * (+) int getInstanceCount();
-     * (+) iterable getClassInterfaces();
      * (+) mixed getConst(string $key);
+     * (+) iterable getClassInterfaces();
      * (+) bool isValidUuid(string $uuid);
      * (+) bool isValidEmail(string $email);
      * (+) bool isValidSHA512(string $hash);
