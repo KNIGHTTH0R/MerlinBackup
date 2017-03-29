@@ -377,7 +377,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * Set the names of the archived directories located in the main repository.
      *
      * The names are defined by ISO formatted dates followed by the database name.
-     *    Example: 2017-03-12-johndeere_equipment_database
+     *    Example: 2017-03-31-johndeere_equipment_database
      *
      * @param string $sortOrder The sort order of the list items ('asc','desc')
      *
@@ -407,7 +407,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * Provide a list of old archive names from an array.
      *
      * The names are defined by ISO formatted dates followed by the database name.
-     *    Example: 2017-03-12-johndeere_equipment_database
+     *    Example: 2017-03-31-johndeere_equipment_database
      *
      * @param iterable $isodatelist The list of dates (ISO formatted)
      * @param iterable $expireTime  The days from today to expire archive
