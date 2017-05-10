@@ -176,18 +176,19 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
      * All of the other 122 bits should be sufficiently random.
      * {@see http://tools.ietf.org/html/rfc4122#section-4.4}
      *
-     * @param bool $isUpper The option to modify text case [upper, lower]
+     * @param bool $isUpper The option to modify case [upper, lower]
      *
-     * @return string The random UUID v.4
+     * @return string The random UUID4
      *
      * @api
      */
     public function getUuid(bool $isUpper = true): string
     {
+        /* Generate from PHP 7 Secure Random Generator */
         $data = random_bytes(16);
         assert(strlen($data) === 16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+        $data[6] = chr(ord($data[6]) & static::CLEAR_VERSION | static::UUID4_VERSION);
+        $data[8] = chr(ord($data[8]) & static::CLEAR_VARIANT | static::RFC_BIT_SIZE);
 
         return true === $isUpper
             ? strtoupper(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)))
