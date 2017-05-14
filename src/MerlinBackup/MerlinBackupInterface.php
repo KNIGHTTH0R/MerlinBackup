@@ -103,4 +103,6 @@ interface MerlinBackupInterface
      * @api
      */
     public function reset(): MerlinBackupInterface;
+
+    //--------------------------------------------------------------------------
 }

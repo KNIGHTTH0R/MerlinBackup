@@ -61,6 +61,8 @@ class IOException extends \RuntimeException implements IOExceptionInterface
         parent::__construct($message, $code, $previous);
     }
 
+    //--------------------------------------------------------------------------
+
     /**
      * Returns the associated path for the exception.
      *
@@ -70,4 +72,6 @@ class IOException extends \RuntimeException implements IOExceptionInterface
     {
         return $this->path;
     }
+
+    //--------------------------------------------------------------------------
 }

@@ -61,4 +61,6 @@ class FileNotFoundException extends IOException
 
         parent::__construct($message, $code, $previous, $path);
     }
+
+    //--------------------------------------------------------------------------
 }
