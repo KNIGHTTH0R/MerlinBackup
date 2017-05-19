@@ -157,8 +157,8 @@ trait MerlinBackupStandardOperations
     public function stringToNumber(string $payload): string
     {
         return join(array_map(
-            function ($n) {
-                return sprintf('%03d', $n);
+            function ($number) {
+                return sprintf('%03d', $number);
             },
             unpack('C*', $payload)
         ));
