@@ -43,7 +43,7 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
      *
      * @api
      */
-    public const VERSION = '1.21.0';
+    public const VERSION = '1.22.0';
 
     //--------------------------------------------------------------------------
 
