@@ -220,6 +220,23 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     //--------------------------------------------------------------------------
 
     /**
+     * Reset all array keys to a default setting value.
+     *
+     * @param bool  $array The array to set item values to some default value
+     * @param mixed $value The default value to set
+     *
+     * @return array The array with all keys set to the same value
+     *
+     * @api
+     */
+    protected function arrayToDefault(array $array, $value = null): array
+    {
+        return array_fill_keys(array_keys($array), $value);
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
      * Reset to default settings.
      *
      * @return MerlinBackupInterface The current instance
@@ -236,6 +253,26 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                             ->setProperty('dumpType', 'tables')
                                 ->setProperty('storageRegister', array())
                                     ->setProperty('configuredDumpOptions', null);
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Set the configured dump options for a msqldump.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    protected function setConfiguredDumpOptions(): MerlinBackupInterface
+    {
+        $configuredDumpOptions = [];
+
+        foreach ($this->mysqlDumpOptions as $key => $value) {
+            if (true === $value) {
+                $configuredDumpOptions[] = $key;
+            }
+        }
+
+        return $this->setProperty('configuredDumpOptions', implode(' ', $configuredDumpOptions));
     }
 
     //--------------------------------------------------------------------------
@@ -259,6 +296,24 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                                 ->setProperty('mysqlDumpOptions', true, '--no-create-info')
                                     ->setProperty('mysqlDumpOptions', false, '--opt')
                                         ->setConfiguredDumpOptions();
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Start logging services.
+     *
+     * @return MerlinBackupInterface The current instance
+     */
+    protected function startupLoggingServices(): MerlinBackupInterface
+    {
+        if (class_exists('UCSDMath\DependencyInjection\ServiceRequestContainer')) {
+            $this->setProperty('service', \UCSDMath\DependencyInjection\ServiceRequestContainer::serviceConnect());
+            $this->setProperty('persist', $this->service->Persistence);
+            $this->setProperty('isLoggingEnabled', true);
+        }
+
+        return $this;
     }
 
     //--------------------------------------------------------------------------
@@ -426,6 +481,22 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
         }
 
         return array_diff($isodatelist, $currentArchiveList);
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Verify database connection.
+     *
+     * @param string $handle The defined API connection handler
+     *
+     * @return string The command to pipe through
+     *
+     * @api
+     */
+    protected function getCompressionFileType(): string
+    {
+        return (string) $this->compressionFileType[$this->compressionType];
     }
 
     //--------------------------------------------------------------------------

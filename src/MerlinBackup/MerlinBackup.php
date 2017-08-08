@@ -81,24 +81,6 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
     //--------------------------------------------------------------------------
 
     /**
-     * Start logging services.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    protected function startupLoggingServices(): MerlinBackupInterface
-    {
-        if (class_exists('UCSDMath\DependencyInjection\ServiceRequestContainer')) {
-            $this->setProperty('service', \UCSDMath\DependencyInjection\ServiceRequestContainer::serviceConnect());
-            $this->setProperty('persist', $this->service->Persistence);
-            $this->setProperty('isLoggingEnabled', true);
-        }
-
-        return $this;
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
      * Add comments to mysqldump files.
      *
      * @return MerlinBackupInterface The current instance
@@ -122,44 +104,7 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
         return $this
             ->setProperty('mysqlDumpOptions', true, '--skip-comments')
                 ->setConfiguredDumpOptions();
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Set the configured dump options for a msqldump.
-     *
-     * @return MerlinBackupInterface The current instance
-     */
-    protected function setConfiguredDumpOptions(): MerlinBackupInterface
-    {
-        $configuredDumpOptions = [];
-
-        foreach ($this->mysqlDumpOptions as $key => $value) {
-            if (true === $value) {
-                $configuredDumpOptions[] = $key;
-            }
-        }
-
-        return $this->setProperty('configuredDumpOptions', implode(' ', $configuredDumpOptions));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Reset all array keys to a default setting value.
-     *
-     * @param bool  $array The array to set item values to some default value
-     * @param mixed $value The default value to set
-     *
-     * @return array The array with all keys set to the same value
-     *
-     * @api
-     */
-    protected function arrayToDefault(array $array, $value = null): array
-    {
-        return array_fill_keys(array_keys($array), $value);
-    }
+    } 
 
     //--------------------------------------------------------------------------
 
@@ -193,22 +138,6 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
         return true === $isUpper
             ? strtoupper(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)))
             : vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Verify database connection.
-     *
-     * @param string $handle The defined API connection handler
-     *
-     * @return string The command to pipe through
-     *
-     * @api
-     */
-    protected function getCompressionFileType(): string
-    {
-        return (string) $this->compressionFileType[$this->compressionType];
     }
 
     //--------------------------------------------------------------------------
