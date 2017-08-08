@@ -372,6 +372,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
 
             if ($result !== false) {
                 /* Collect a list of all database table names */
+                $tables = [];
                 while ($row = $result->fetch_array()) {
                     $tables[] = $row[0];
                 }
@@ -488,7 +489,44 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
     /**
      * Verify database connection.
      *
-     * @param string $handle The defined API connection handler
+     * @return string The compression type used with pipe
+     *
+     * @api
+     */
+    protected function getCompression(): string
+    {
+        return 'None' === $this->compressionType
+            ? (string) null
+            : sprintf('| %s', strtolower($this->compressionType));
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Verify that a string contains/begins with a date.
+     *
+     * Regex options for (yyyy-mm-dd) either contains or begins with:
+     *    + preg_match('/\b(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
+     *    + preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
+     *
+     * @param string $word The string that may have a format date listing (e.g., yyyy-mm-dd)
+     *
+     * @return bool The result
+     */
+    protected function wordContainsDate(string $word): bool
+    {
+        /* Begins with a valid date: yyy-mm-dd */
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)) {
+            return checkdate((int) $parts[2], (int) $parts[3], (int) $parts[1]);
+        }
+
+        return false;
+    }
+
+    //--------------------------------------------------------------------------
+
+    /**
+     * Verify database connection.
      *
      * @return string The command to pipe through
      *

@@ -163,22 +163,6 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
     //--------------------------------------------------------------------------
 
     /**
-     * Verify database connection.
-     *
-     * @return string The compression type used with pipe
-     *
-     * @api
-     */
-    protected function getCompression(): string
-    {
-        return 'None' === $this->compressionType
-            ? (string) null
-            : sprintf('| %s', strtolower($this->compressionType));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
      * Delete an item value from an array.
      *
      * @param string $item      The string item value to delete
@@ -189,29 +173,6 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
     protected function arrayDeleteItem(string $item, array $arrayList): array
     {
         return array_diff($arrayList, array($item));
-    }
-
-    //--------------------------------------------------------------------------
-
-    /**
-     * Verify that a string contains/begins with a date.
-     *
-     * Regex options for (yyyy-mm-dd) either contains or begins with:
-     *    + preg_match('/\b(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
-     *    + preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)
-     *
-     * @param string $word The string that may have a format date listing (e.g., yyyy-mm-dd)
-     *
-     * @return bool The result
-     */
-    protected function wordContainsDate(string $word): bool
-    {
-        /* Begins with a valid date: yyy-mm-dd */
-        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})\b/', $word, $parts)) {
-            return checkdate((int) $parts[2], (int) $parts[3], (int) $parts[1]);
-        }
-
-        return false;
     }
 
     //--------------------------------------------------------------------------
