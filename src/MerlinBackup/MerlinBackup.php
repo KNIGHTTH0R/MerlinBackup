@@ -104,7 +104,7 @@ class MerlinBackup extends AbstractMerlinBackup implements MerlinBackupInterface
         return $this
             ->setProperty('mysqlDumpOptions', true, '--skip-comments')
                 ->setConfiguredDumpOptions();
-    } 
+    }
 
     //--------------------------------------------------------------------------
 
