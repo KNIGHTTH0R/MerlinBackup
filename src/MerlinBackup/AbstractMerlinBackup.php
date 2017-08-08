@@ -59,7 +59,7 @@ use UCSDMath\Configuration\ConfigurationVault\ConfigurationVaultInterface;
  * (-) bool wordContainsDate(string $word);
  * (-) MerlinBackupInterface startupLoggingServices();
  * (-) MerlinBackupInterface setConfiguredDumpOptions();
- * (-) iterable arrayToDefault(iterable $array, $value = null);
+ * (-) array arrayToDefault(array $array, $value = null);
  * (-) MerlinBackupInterface verifyDatabaseConnection(string $handle = 'mysqli');
  * (-) MerlinBackupInterface setRepositoryArchiveNames(string $sortOrder = 'asc');
  * (-) MerlinBackupInterface setCharacterEncoding(string $charSet = 'utf8mb4', string $handle = 'mysqli');
@@ -103,14 +103,14 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * @var    bool                        $isMysqldumpEnabled           The option to enable file dumps of MySQL tables and databases
      * @var    bool                        $isLoggingEnabled             The option to provide logging services (internally configured only)
      * @var    string                      $compressionType              The default file compression type or scheme ('None','GZIP','BZIP2','COMPRESS','LZMA')
-     * @var    iterable                    $compressionFileType          The default file compression types with their associated filename extensions
-     * @var    iterable                    $repositoryArchiveNames       The names of the archived directories located in main repository
+     * @var    array                       $compressionFileType          The default file compression types with their associated filename extensions
+     * @var    array                       $repositoryArchiveNames       The names of the archived directories located in main repository
      * @static MerlinBackupInterface       $instance                     The static instance MerlinBackupInterface
      * @static int                         $objectCount                  The static count of MerlinBackupInterface
-     * @var    iterable                    $storageRegister              The stored set of data structures used by this class
+     * @var    array                       $storageRegister              The stored set of data structures used by this class
      * @var    string                      $dumpType                     The preferred dump type (the database vs. each table in a database)
      * @var    string                      $configuredDumpOptions        The calculated options used in the mysqldump request
-     * @var    iterable                    $mysqlDumpOptions             The options to use within the mysqldump statement
+     * @var    array                       $mysqlDumpOptions             The options to use within the mysqldump statement
      */
     protected $filesystem                   = null;
     protected $configVault                  = null;
@@ -409,12 +409,12 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * The names are defined by ISO formatted dates followed by the database name.
      *    Example: 2017-07-18-johndeere_equipment_database
      *
-     * @param iterable $isodatelist The list of dates (ISO formatted)
-     * @param iterable $expireTime  The days from today to expire archive
+     * @param array $isodatelist The list of dates (ISO formatted)
+     * @param array $expireTime  The days from today to expire archive
      *
-     * @return iterable The filtered result
+     * @return array The filtered result
      */
-    protected function listOldArchives(iterable $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): iterable
+    protected function listOldArchives(array $isodatelist, $expireTime = self::MERLIN_MYSQLDUMP_REPOSITORY_EXPIRETIME): array
     {
         $expireTime = null === $this->repositoryExpireTime ? $expireTime : $this->repositoryExpireTime;
         $archiveDate = date('Y-m-d', strtotime(sprintf('-%s days', $expireTime)));
@@ -498,7 +498,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * Method list: (+) @api, (-) protected or private visibility.
      *
-     * (+) iterable all();
+     * (+) array all();
      * (+) object init();
      * (+) string version();
      * (+) bool isString($str);
@@ -506,19 +506,19 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * (+) string getClassName();
      * (+) int getInstanceCount();
      * (+) mixed getConst(string $key);
-     * (+) iterable getClassInterfaces();
+     * (+) array getClassInterfaces();
      * (+) bool isValidUuid(string $uuid);
      * (+) bool isValidEmail(string $email);
      * (+) bool isValidSHA512(string $hash);
      * (+) bool doesFunctionExist(string $functionName);
-     * (+) bool isStringKey(string $str, iterable $keys);
+     * (+) bool isStringKey(string $str, array $keys);
      * (+) mixed get(string $key, string $subkey = null);
      * (+) mixed getProperty(string $name, string $key = null);
-     * (+) mixed __call(string $callback, iterable $parameters);
+     * (+) mixed __call(string $callback, array $parameters);
      * (+) object set(string $key, $value, string $subkey = null);
      * (+) object setProperty(string $name, $value, string $key = null);
-     * (-) Exception throwExceptionError(iterable $error);
-     * (-) InvalidArgumentException throwInvalidArgumentExceptionError(iterable $error);
+     * (-) Exception throwExceptionError(array $error);
+     * (-) InvalidArgumentException throwInvalidArgumentExceptionError(array $error);
      */
     use ServiceFunctions;
 
