@@ -32,7 +32,7 @@ class IOException extends \RuntimeException implements IOExceptionInterface
      *
      * @api
      */
-    public const VERSION = '1.26.0';
+    public const VERSION = '1.27.0';
 
     //--------------------------------------------------------------------------
 
