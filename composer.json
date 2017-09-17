@@ -14,16 +14,16 @@
     ],
     "require": {
         "php": ">=7.1",
-        "ucsdmath/sftp": "1.26.0",
-        "ucsdmath/filesystem": "1.26.0",
-        "ucsdmath/configuration-vault": "1.26.0"
+        "ucsdmath/sftp": "1.26.x-dev",
+        "ucsdmath/filesystem": "1.26.x-dev",
+        "ucsdmath/configuration-vault": "1.26.x-dev"
     },
     "require-dev": {
         "symfony/debug": "3.3.9",
         "mockery/mockery": "0.9.9",
         "phpunit/phpunit": "6.3.0",
         "fzaninotto/faker": "1.7.1",
-        "ucsdmath/date": "1.26.0",
+        "ucsdmath/date": "1.26.x-dev",
         "symfony/var-dumper": "3.3.9",
         "symfony/browser-kit": "3.3.9",
         "symfony/dom-crawler": "3.3.9",
