@@ -25,7 +25,7 @@ namespace UCSDMath\MerlinBackup\Exception;
  *
  * @api
  */
-interface IOExceptionInterface extends ExceptionInterface
+interface IOExceptionInterface
 {
     /**
      * Returns the associated path for the exception
