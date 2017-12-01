@@ -4,6 +4,60 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.0.0 (2017-12-03)
+
+There are many updates in release. Switching from Symfony v3.x to v4.x (the new release).
+New minimum requirement: PHP ^7.1.3
+
+ - The framework updates include:
+ - Update to Node.js [(v9.2.0)](https://nodejs.org/en/)
+ - Update to WordPress [(v4.9.1)](https://wordpress.org)
+ - Update to Composer [(v1.5.3)](https://getcomposer.org)
+ - Update to React.js [(v16.1.1)](https://facebook.github.io/react/)
+ - Update to hashids.js [(v1.1.4)](https://www.npmjs.com/package/hashids)
+ - Update to CountUp.js [(v1.9.3)](http://inorganik.github.io/countUp.js/)
+ - Update to TinyMCE [(v4.7.3)](http://www.tinymce.com/download/download.php)
+ - Update to Moment [(v2.19.3)](http://momentjs.com) - [Fix for ReDOS vulnerability](https://nodesecurity.io/advisories/532)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.0)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.0)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.0)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.0)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.0)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.0)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.0)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.0)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.0)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.0)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.0)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.0)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.0)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.0)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.0)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.0)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.0)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.0)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.0)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.0)](https://packagist.org/packages/symfony/options-resolver)
+
+ - Update to PHP Component: endroid/qrcode [(v2.5.0)](https://github.com/endroid/QrCode)
+ - Update to PHP Component: league/csv [(v9.1.1)](https://packagist.org/packages/league/csv)
+ - Update to PHP Component: doctrine/orm [(v2.5.13)](https://packagist.org/packages/doctrine/orm)
+ - Update to PHP Component: doctrine/dbal [(v2.6.3)](https://packagist.org/packages/doctrine/dbal)
+ - Update to PHP Component: phpunit/phpunit [(v6.5.1)](https://packagist.org/packages/phpunit/phpunit)
+ - Update to PHP Component: phpseclib/phpseclib [(v2.0.9)](https://packagist.org/packages/phpseclib/phpseclib)
+ - Update to PHP Component: league/flysystem-sftp [(v1.0.15)](https://packagist.org/packages/league/flysystem-sftp)
+ - Update to PHP Component: egulias/email-validator [(v2.1.3)](https://packagist.org/packages/egulias/email-validator)
+ - Update to PHP Component: spatie/flysystem-dropbox [(v1.0.6)](https://packagist.org/packages/spatie/flysystem-dropbox)
+ - Update to PHP Component: mtdowling/cron-expression [(v2.0.0)](https://packagist.org/packages/mtdowling/cron-expression)
+
+Notes:
+ - Removed All Account Services from VersionEye. The company is closing at the end of 2017. No longer servicing community.
+ - Created new Github package for installing the TinyMCE default skin for UCSDMath Framework:
+        `ucsdmath/ucsdmath-grayskin`
+ - Class changes with UCSDMath moving into Symfony v4.0.0: (`ucsdmath/serialize`, `ucsdmath/framework`, `ucsdmath/filesystem`)
+ - Prep for adding support for: PHP v7.2.0, Symfony v4.0.0, mPDF 7.0.2.
+
 ### v1.28.0 (2017-10-29)
 
  - Update to Node.js [(v8.8.1)](https://nodejs.org/en/)
