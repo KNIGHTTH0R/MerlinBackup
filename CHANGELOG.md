@@ -12,7 +12,7 @@ New minimum requirement: PHP ^7.1.3
  - The framework updates include:
  - Update to Node.js [(v9.2.0)](https://nodejs.org/en/)
  - Update to WordPress [(v4.9.1)](https://wordpress.org)
- - Update to Composer [(v1.5.3)](https://getcomposer.org)
+ - Update to Composer [(v1.5.5)](https://getcomposer.org)
  - Update to React.js [(v16.1.1)](https://facebook.github.io/react/)
  - Update to hashids.js [(v1.1.4)](https://www.npmjs.com/package/hashids)
  - Update to CountUp.js [(v1.9.3)](http://inorganik.github.io/countUp.js/)
