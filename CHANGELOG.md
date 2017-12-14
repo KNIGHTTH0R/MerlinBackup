@@ -4,6 +4,50 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.1.0 (2017-12-14)
+
+ - Update to npm [(v5.6.0)](https://www.npmjs.com)
+ - Update to Moment [(v2.19.4)](http://momentjs.com)
+ - Update to Node.js [(v9.2.1)](https://nodejs.org/en/)
+ - Update to Webpack.js [(v3.10.0)](https://webpack.js.org)
+ - Update to React.js [(v16.2.0)](https://facebook.github.io/react/)
+ - Update to TinyMCE [(v4.7.4)](http://www.tinymce.com/download/download.php)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.1)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.1)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.1)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.1)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.1)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.1)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.1)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.1)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.1)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.1)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.1)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.1)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.1)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.1)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.1)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.1)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.1)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.1)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.1)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.1)](https://packagist.org/packages/symfony/options-resolver)
+
+ - Update to PHP Component: endroid/qrcode [(v3.0.3)](https://github.com/endroid/QrCode)
+ - Update to PHP Component: phpunit/phpunit [(v6.5.4)](https://packagist.org/packages/phpunit/phpunit)
+ - Update to PHP Component: squizlabs/php_codesniffer [(v3.2.0)](https://github.com/squizlabs/PHP_CodeSniffer)
+ - Update to PHP Component: doctrine/annotations [(v1.6.0)](https://packagist.org/packages/doctrine/annotations)
+
+Notes:
+ - Fix: Panel redirect issue was resolved.
+ - Update to PHP Component: UCSDMath/Session [(v2.1.0)](https://github.com/ucsdmath/Session)
+ - Update to PHP Component: UCSDMath/Database [(v2.1.0)](https://github.com/ucsdmath/Database)
+ - Update to PHP Component: UCSDMath/Security [(v2.1.0)](https://github.com/ucsdmath/Security)
+ - Update to PHP Component: UCSDMath/Framework [(v2.1.0)](https://github.com/ucsdmath/Framework)
+ - Update to PHP Component: UCSDMath/Configuration [(v2.1.0)](https://github.com/ucsdmath/Configuration)
+ - Update to PHP Component: UCSDMath/Authentication [(v2.1.0)](https://github.com/ucsdmath/Authentication)
+
 ### v2.0.0 (2017-12-03)
 
 There are many updates in release. Switching from Symfony v3.x to v4.x (the new release).
