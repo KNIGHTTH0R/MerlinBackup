@@ -5,7 +5,7 @@
     "keywords": ["merlin-backup", "ucsdmath", "backup", "mysql", "component"],
     "homepage": "https://github.com/ucsdmath",
     "license": "MIT",
-    "time": "2017-12-14",
+    "time": "2017-12-29",
     "authors": [
         {
             "name": "Daryl Eisner",

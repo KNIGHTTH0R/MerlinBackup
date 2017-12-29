@@ -4,6 +4,41 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.2.0 (2017-12-29)
+
+ - Update to Moment [(v2.20.1)](http://momentjs.com)
+ - Update to Node.js [(v9.3.0)](https://nodejs.org/en/)
+ - Update to Composer [(v1.5.6)](https://getcomposer.org)
+ - Update to tablesorter jQuery plugin [(v2.29.2)](https://mottie.github.io/tablesorter/docs/)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.2)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.2)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.2)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.2)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.2)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.2)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.2)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.2)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.2)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.2)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.2)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.2)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.2)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.2)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.2)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.2)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.2)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.2)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.2)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.2)](https://packagist.org/packages/symfony/options-resolver)
+
+ - Update to PHP Component: doctrine/orm [(v2.5.14)](https://packagist.org/packages/doctrine/orm)
+ - Update to PHP Component: phpunit/phpunit [(v6.5.5)](https://packagist.org/packages/phpunit/phpunit)
+ - Update to PHP Component: squizlabs/php_codesniffer [(v3.2.1)](https://github.com/squizlabs/PHP_CodeSniffer)
+
+Notes:
+ - New application `ucsdmath-apps/advising-hours` [(v2.2.0)](private repository / not listed)
+
 ### v2.1.0 (2017-12-14)
 
  - Update to npm [(v5.6.0)](https://www.npmjs.com)
