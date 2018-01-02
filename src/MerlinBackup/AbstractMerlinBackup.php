@@ -75,7 +75,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * @api
      */
-    public const VERSION = '2.2.0';
+    public const VERSION = '2.3.0';
 
     //--------------------------------------------------------------------------
 
