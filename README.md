@@ -15,7 +15,7 @@
     <td width="250" align="center">
         <a href="https://insight.sensiolabs.com/projects/2d9d8c50-e0ec-4cc9-8588-b1bbc8aeb8e9">
         <img src="https://insight.sensiolabs.com/projects/2d9d8c50-e0ec-4cc9-8588-b1bbc8aeb8e9/big.png" style="float: right; margin: 0px 0px 10px 10px;" width="212" height="51"></a><br>
-        <a href="https://travis-ci.org/ucsdmath/MerlinBackup"><img src="https://img.shields.io/badge/PHP-%207.1%20Tested%20-33cc33.svg"></a>
+        <a href="https://travis-ci.org/ucsdmath/MerlinBackup"><img src="https://img.shields.io/badge/PHP-%207.2%20Tested%20-33cc33.svg"></a>
     </td>
     <td width="180" align="center">
         <a href="https://codeclimate.com/github/ucsdmath/MerlinBackup">
@@ -41,7 +41,7 @@
         <img src="https://poser.pugx.org/ucsdmath/merlin-backup/v/stable"></a></td>
     <td valign="top" width="108" align="center">
         <a href="https://php.net/">
-        <img src="https://img.shields.io/badge/PHP-%3E%3D%207.1-8892BF.svg"></a></td>
+        <img src="https://img.shields.io/badge/PHP-%3E%3D%207.1.3-8892BF.svg"></a></td>
     <td valign="top" width="150" align="center">
         <a href="https://packagist.org/packages/ucsdmath/merlin-backup">
         <img src="https://poser.pugx.org/ucsdmath/merlin-backup/downloads"></a></td>
