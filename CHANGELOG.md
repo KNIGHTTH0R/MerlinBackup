@@ -4,6 +4,52 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.3.0 (2018-01-28)
+
+ - Update to Node.js [(v9.4.0)](https://nodejs.org/en/)
+ - Update to Composer [(v1.6.2)](https://getcomposer.org)
+ - Update to jQuery [(v3.3.1)](http://jquery.com/download/)
+ - Update to TinyMCE [(v4.7.5)](http://www.tinymce.com/download/download.php)
+ - Update to jQuery-Multiselect.js [(v2.4.1)](https://github.com/crlcu/multiselect)
+ - Update to tablesorter jQuery plugin [(v2.29.4)](https://mottie.github.io/tablesorter/docs/)
+ - Added new jQuery-Filterizr.js plugin [(v1.3.1)](https://github.com/giotiskl/Filterizr/releases)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.3)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.3)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.3)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.3)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.3)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.3)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.3)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.3)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.3)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.3)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.3)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.3)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.3)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.3)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.3)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.3)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.3)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.3)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.3)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.3)](https://packagist.org/packages/symfony/options-resolver)
+
+ - Update to PHP Component: mpdf/mpdf [(v7.0.3)](https://mpdf.github.io)
+ - Update to PHP Component: endroid/qr-code [(v3.2.3)](https://github.com/endroid/qr-code)
+ - Update to PHP Component: doctrine/orm [(v2.6.0)](https://packagist.org/packages/doctrine/orm)
+ - Update to PHP Component: league/flysystem [(v1.0.42)](https://packagist.org/packages/league/flysystem)
+ - Update to PHP Component: doctrine/inflector [(v1.3.0)](https://packagist.org/packages/doctrine/inflector)
+ - Update to PHP Component: respect/validation [(v1.1.15)](https://packagist.org/packages/respect/validation)
+
+ - Added: a function when creating a new record to allow self-deleting on Cancel requests (all applications).
+ - Added: a User's Listing Table Widget for the Panel with clock (displays users currently logged into the system)
+ - Fixed: News Manager (js: directory delete) display issue of not routing to the current records view.
+ - Fixed: variable collisions in PHP Component: UCSDMath/Database [(v2.2.0)](https://github.com/ucsdmath/Database)
+ - Update: now Compatible with PHP v7.2
+
+Notes:
+
 ### v2.2.0 (2017-12-29)
 
  - Update to Moment [(v2.20.1)](http://momentjs.com)
