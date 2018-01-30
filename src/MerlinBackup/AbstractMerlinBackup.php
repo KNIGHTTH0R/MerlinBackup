@@ -417,11 +417,11 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
                     $this->filesystem->touch($filename, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
                 }
                 $this->filesystem->touch($this->backupDirectory, strtotime($this->todaysTimestamp), strtotime($this->todaysTimestamp));
-            }
-        }
 
-        if (true === $this->isLoggingEnabled) {
-            $this->persist->createSystemLog(sprintf('-- Merlin: Daily database dump availble for: %s', $this->backupDirectory));
+                if (true === $this->isLoggingEnabled) {
+                    $this->persist->createSystemLog(sprintf('-- Merlin: Daily database dump availble for: %s', $this->backupDirectory));
+                }
+            }
         }
 
         return $this;
