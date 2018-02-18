@@ -4,6 +4,60 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.4.0 (2018-02-18)
+
+ - Update to Lodash [(v4.17.5)](https://lodash.com)
+ - Update to Node.js [(v9.5.0)](https://nodejs.org/en/)
+ - Update to WordPress [(v4.9.4)](https://wordpress.org)
+ - Update to Composer [(v1.6.3)](https://getcomposer.org)
+ - Update to TinyMCE [(v4.7.6)](http://www.tinymce.com/download/download.php)
+ - Update to jQuery-Filterizr Plugin [(v1.3.3)](https://www.npmjs.com/package/filterizr)
+ - Update to jQuery-Tablesorter Plugin [(v2.29.5)](https://www.npmjs.com/package/tablesorter)
+ - Update to jQuery-DataTables Plugin [(v1.10.16)](https://www.npmjs.com/package/datatables.net-dt)
+ - Update to jQuery-Multiselect Plugin [(v2.5.0)](https://www.npmjs.com/package/multiselect-two-sides)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.4)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.4)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.4)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.4)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.4)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.4)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.4)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.4)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.4)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.4)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.4)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.4)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.4)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.4)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.4)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.4)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.4)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.4)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.4)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.4)](https://packagist.org/packages/symfony/options-resolver)
+ - Update to PHP Component: symfony/polyfill-mbstring [(v1.7.0)](https://packagist.org/packages/symfony/polyfill-mbstring)
+
+ - Update to PHP Component: endroid/qr-code [(v3.2.7)](https://github.com/endroid/qr-code)
+ - Update to PHP Component: league/uri [(v5.2.0)](https://packagist.org/packages/league/uri)
+ - Update to PHP Component: league/csv [(v9.1.2)](https://packagist.org/packages/league/csv)
+ - Update to PHP Component: phpunit/phpunit [(v7.0.1)](https://packagist.org/packages/phpunit/phpunit)
+ - Update to PHP Component: league/uri-parser [(v1.3.0)](https://packagist.org/packages/league/uri-parser)
+ - Update to PHP Component: illuminate/cache [(v5.6.3)](https://packagist.org/packages/illuminate/cache)
+ - Update to PHP Component: illuminate/support [(v5.6.3)](https://packagist.org/packages/illuminate/support)
+ - Update to PHP Component: illuminate/filesystem [(v5.6.3)](https://packagist.org/packages/illuminate/filesystem)
+ - Update to PHP Component: dragonmantank/cron-expression [(v2.0.0)](https://packagist.org/packages/dragonmantank/cron-expression)
+
+ - Added new PHP Component: guzzlehttp/guzzle [(v6.3.0)](https://packagist.org/packages/guzzlehttp/guzzle)
+ - Added new PHP Component: johngrogg/ics-parser [(v2.1.2)](https://packagist.org/packages/johngrogg/ics-parser)
+ - Added new PHP repository: ucsdmath/ics-loader [(v1.24.0)](https://github.com/ucsdmath/fast-sync)
+ - Added new PHP repository: ucsdmath/image-uploader [(v1.24.0)](https://github.com/ucsdmath/fast-sync)
+
+Notes:
+   [1] built new table for application scheduling: academic_calendars.ddl
+   [2] built new table for enduser image collections: image_warehouse.ddl
+   [3] Update to Component ucsdmath/asset to always match UCSDMath Framework version in applications
+
 ### v2.3.0 (2018-01-28)
 
  - Update to Node.js [(v9.4.0)](https://nodejs.org/en/)

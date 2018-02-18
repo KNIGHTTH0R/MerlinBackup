@@ -75,7 +75,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      *
      * @api
      */
-    public const VERSION = '2.3.0';
+    public const VERSION = '2.4.0';
 
     //--------------------------------------------------------------------------
 
@@ -433,7 +433,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * Set the names of the archived directories located in the main repository.
      *
      * The names are defined by ISO formatted dates followed by the database name.
-     *    Example: 2018-01-28-johndeere_equipment_database
+     *    Example: 2018-02-18-johndeere_equipment_database
      *
      * @param string $sortOrder The sort order of the list items ('asc','desc')
      *
@@ -463,7 +463,7 @@ abstract class AbstractMerlinBackup implements MerlinBackupInterface, ServiceFun
      * Provide a list of old archive names from an array.
      *
      * The names are defined by ISO formatted dates followed by the database name.
-     *    Example: 2018-01-28-johndeere_equipment_database
+     *    Example: 2018-02-18-johndeere_equipment_database
      *
      * @param array $isodatelist The list of dates (ISO formatted)
      * @param array $expireTime  The days from today to expire archive
