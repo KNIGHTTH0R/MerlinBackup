@@ -4,6 +4,59 @@
 All notable changes to `UCSDMath/MerlinBackup` (bug, security fixes, and component
 updates) will be documented in this file.
 
+### v2.5.0 (2018-03-18)
+
+ - Update to npm [(v5.7.1)](https://www.npmjs.com)
+ - Update to Moment [(v2.21.0)](http://momentjs.com)
+ - Update to Node.js [(v9.8.0)](https://nodejs.org/en/)
+ - Update to Webpack.js [(v4.1.1)](https://webpack.js.org)
+ - Update to Webpack CLI [(v2.0.12)](https://webpack.js.org)
+ - Update to Electron.js [(v1.8.3)](https://www.npmjs.com/package/electron)
+ - Update to TinyMCE [(v4.7.9)](http://www.tinymce.com/download/download.php)
+ - Update to Modernizr.js [(v3.6.0)](https://github.com/Modernizr/Modernizr/releases)
+ - Update to jQuery-Filterizr Plugin [(v1.3.4)](https://www.npmjs.com/package/filterizr)
+ - Update to jQuery-Tablesorter Plugin [(v2.29.6)](https://www.npmjs.com/package/tablesorter)
+
+ - Update to PHP Component: symfony/yaml [(v4.0.6)](https://packagist.org/packages/symfony/yaml)
+ - Update to PHP Component: symfony/debug [(v4.0.6)](https://packagist.org/packages/symfony/debug)
+ - Update to PHP Component: symfony/finder [(v4.0.6)](https://packagist.org/packages/symfony/finder)
+ - Update to PHP Component: symfony/console [(v4.0.6)](https://packagist.org/packages/symfony/console)
+ - Update to PHP Component: symfony/process [(v4.0.6)](https://packagist.org/packages/symfony/process)
+ - Update to PHP Component: symfony/routing [(v4.0.6)](https://packagist.org/packages/symfony/routing)
+ - Update to PHP Component: symfony/security [(v4.0.6)](https://packagist.org/packages/symfony/security)
+ - Update to PHP Component: symfony/validator [(v4.0.6)](https://packagist.org/packages/symfony/validator)
+ - Update to PHP Component: symfony/filesystem [(v4.0.6)](https://packagist.org/packages/symfony/filesystem)
+ - Update to PHP Component: symfony/serializer [(v4.0.6)](https://packagist.org/packages/symfony/serializer)
+ - Update to PHP Component: symfony/var-dumper [(v4.0.6)](https://packagist.org/packages/symfony/var-dumper)
+ - Update to PHP Component: symfony/browser-kit [(v4.0.6)](https://packagist.org/packages/symfony/browser-kit)
+ - Update to PHP Component: symfony/dom-crawler [(v4.0.6)](https://packagist.org/packages/symfony/dom-crawler)
+ - Update to PHP Component: symfony/http-kernel [(v4.0.6)](https://packagist.org/packages/symfony/http-kernel)
+ - Update to PHP Component: symfony/security-core [(v4.0.6)](https://packagist.org/packages/symfony/security-core)
+ - Update to PHP Component: symfony/security-csrf [(v4.0.6)](https://packagist.org/packages/symfony/security-csrf)
+ - Update to PHP Component: symfony/http-foundation [(v4.0.6)](https://packagist.org/packages/symfony/http-foundation)
+ - Update to PHP Component: symfony/event-dispatcher [(v4.0.6)](https://packagist.org/packages/symfony/event-dispatcher)
+ - Update to PHP Component: symfony/framework-bundle [(v4.0.6)](https://packagist.org/packages/symfony/framework-bundle)
+ - Update to PHP Component: symfony/options-resolver [(v4.0.6)](https://packagist.org/packages/symfony/options-resolver)
+
+ - Update to PHP Component: twig/twig [(v2.4.6)](https://packagist.org/packages/twig/twig)
+ - Update to PHP Component: endroid/qr-code [(v3.2.8)](https://github.com/endroid/qr-code)
+ - Update to PHP Component: league/csv [(v9.1.3)](https://packagist.org/packages/league/csv)
+ - Update to PHP Component: doctrine/orm [(v2.6.1)](https://packagist.org/packages/doctrine/orm)
+ - Update to PHP Component: nesbot/carbon [(v1.24.2)](https://packagist.org/packages/nesbot/carbon)
+ - Update to PHP Component: hashids/hashids [(v3.0.0)](https://packagist.org/packages/hashids/hashids)
+ - Update to PHP Component: phpunit/phpunit [(v7.0.2)](https://packagist.org/packages/phpunit/phpunit)
+ - Update to PHP Component: illuminate/cache [(v5.6.12)](https://packagist.org/packages/illuminate/cache)
+ - Update to PHP Component: league/flysystem [(v1.0.43)](https://packagist.org/packages/league/flysystem)
+ - Update to PHP Component: league/uri-parser [(v1.4.0)](https://packagist.org/packages/league/uri-parser)
+ - Update to PHP Component: illuminate/support [(v5.6.12)](https://packagist.org/packages/illuminate/support)
+ - Update to PHP Component: squizlabs/php_codesniffer [(v3.2.1)](https://github.com/squizlabs/PHP_CodeSniffer)
+ - Update to PHP Component: ezyang/htmlpurifier [(v4.10.0)](https://packagist.org/packages/ezyang/htmlpurifier)
+ - Update to PHP Component: phpseclib/phpseclib [(v2.0.10)](https://packagist.org/packages/phpseclib/phpseclib)
+ - Update to PHP Component: illuminate/filesystem [(v5.6.12)](https://packagist.org/packages/illuminate/filesystem)
+
+Notes/Deliverables:
+   [1] Update to Course Petitions adding major id codes.
+
 ### v2.4.0 (2018-02-18)
 
  - Update to Lodash [(v4.17.5)](https://lodash.com)
